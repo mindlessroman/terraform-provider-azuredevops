@@ -175,9 +175,9 @@ func updateServiceEndpoint(clients *config.AggregatedClient, endpoint *serviceen
 	return updatedServiceEndpoint, err
 }
 
-func genServiceEndpointCreateFunc(flatFunc flatFunc, expandFunc expandFunc) func(d *schema.ResourceData, m interface{}) error {
-	return func(d *schema.ResourceData, m interface{}) error {
-		clients := m.(*config.AggregatedClient)
+func genServiceEndpointCreateFunc(flatFunc flatFunc, expandFunc expandFunc) func(d *schema.ResourceData, meta interface{}) error {
+	return func(d *schema.ResourceData, meta interface{}) error {
+		clients := meta.(*config.AggregatedClient)
 		serviceEndpoint, projectID := expandFunc(d)
 
 		createdServiceEndpoint, err := createServiceEndpoint(clients, serviceEndpoint, projectID)
@@ -190,9 +190,9 @@ func genServiceEndpointCreateFunc(flatFunc flatFunc, expandFunc expandFunc) func
 	}
 }
 
-func genServiceEndpointReadFunc(flatFunc flatFunc) func(d *schema.ResourceData, m interface{}) error {
-	return func(d *schema.ResourceData, m interface{}) error {
-		clients := m.(*config.AggregatedClient)
+func genServiceEndpointReadFunc(flatFunc flatFunc) func(d *schema.ResourceData, meta interface{}) error {
+	return func(d *schema.ResourceData, meta interface{}) error {
+		clients := meta.(*config.AggregatedClient)
 
 		var serviceEndpointID *uuid.UUID
 		parsedServiceEndpointID, err := uuid.Parse(d.Id())
@@ -219,8 +219,8 @@ func genServiceEndpointReadFunc(flatFunc flatFunc) func(d *schema.ResourceData, 
 }
 
 func genServiceEndpointUpdateFunc(flatFunc flatFunc, expandFunc expandFunc) schema.UpdateFunc {
-	return func(d *schema.ResourceData, m interface{}) error {
-		clients := m.(*config.AggregatedClient)
+	return func(d *schema.ResourceData, meta interface{}) error {
+		clients := meta.(*config.AggregatedClient)
 		serviceEndpoint, projectID := expandFunc(d)
 
 		updatedServiceEndpoint, err := updateServiceEndpoint(clients, serviceEndpoint, projectID)
@@ -234,8 +234,8 @@ func genServiceEndpointUpdateFunc(flatFunc flatFunc, expandFunc expandFunc) sche
 }
 
 func genServiceEndpointDeleteFunc(expandFunc expandFunc) schema.DeleteFunc {
-	return func(d *schema.ResourceData, m interface{}) error {
-		clients := m.(*config.AggregatedClient)
+	return func(d *schema.ResourceData, meta interface{}) error {
+		clients := meta.(*config.AggregatedClient)
 		serviceEndpoint, projectID := expandFunc(d)
 
 		return deleteServiceEndpoint(clients, projectID, serviceEndpoint.Id)

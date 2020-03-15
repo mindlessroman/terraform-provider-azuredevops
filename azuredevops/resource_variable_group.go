@@ -91,8 +91,8 @@ func resourceVariableGroup() *schema.Resource {
 	}
 }
 
-func resourceVariableGroupCreate(d *schema.ResourceData, m interface{}) error {
-	clients := m.(*config.AggregatedClient)
+func resourceVariableGroupCreate(d *schema.ResourceData, meta interface{}) error {
+	clients := meta.(*config.AggregatedClient)
 	variableGroupParameters, projectID := expandVariableGroupParameters(d)
 
 	addedVariableGroup, err := createVariableGroup(clients, variableGroupParameters, projectID)
@@ -114,8 +114,8 @@ func resourceVariableGroupCreate(d *schema.ResourceData, m interface{}) error {
 	return nil
 }
 
-func resourceVariableGroupRead(d *schema.ResourceData, m interface{}) error {
-	clients := m.(*config.AggregatedClient)
+func resourceVariableGroupRead(d *schema.ResourceData, meta interface{}) error {
+	clients := meta.(*config.AggregatedClient)
 
 	projectID, variableGroupID, err := tfhelper.ParseProjectIDAndResourceID(d)
 	if err != nil {
@@ -156,8 +156,8 @@ func resourceVariableGroupRead(d *schema.ResourceData, m interface{}) error {
 	return nil
 }
 
-func resourceVariableGroupUpdate(d *schema.ResourceData, m interface{}) error {
-	clients := m.(*config.AggregatedClient)
+func resourceVariableGroupUpdate(d *schema.ResourceData, meta interface{}) error {
+	clients := meta.(*config.AggregatedClient)
 	variableGroupParams, projectID := expandVariableGroupParameters(d)
 
 	_, variableGroupID, err := tfhelper.ParseProjectIDAndResourceID(d)
@@ -184,8 +184,8 @@ func resourceVariableGroupUpdate(d *schema.ResourceData, m interface{}) error {
 	return nil
 }
 
-func resourceVariableGroupDelete(d *schema.ResourceData, m interface{}) error {
-	clients := m.(*config.AggregatedClient)
+func resourceVariableGroupDelete(d *schema.ResourceData, meta interface{}) error {
+	clients := meta.(*config.AggregatedClient)
 	projectID, variableGroupID, err := tfhelper.ParseProjectIDAndResourceID(d)
 	if err != nil {
 		return fmt.Errorf("Error parsing the variable group ID from the Terraform resource data: %v", err)

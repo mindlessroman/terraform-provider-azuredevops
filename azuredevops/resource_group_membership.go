@@ -51,8 +51,8 @@ func resourceGroupMembership() *schema.Resource {
 	}
 }
 
-func resourceGroupMembershipCreate(d *schema.ResourceData, m interface{}) error {
-	clients := m.(*config.AggregatedClient)
+func resourceGroupMembershipCreate(d *schema.ResourceData, meta interface{}) error {
+	clients := meta.(*config.AggregatedClient)
 	group := d.Get("group").(string)
 	mode := d.Get("mode").(string)
 	membersToAdd := d.Get("members").(*schema.Set)
@@ -72,7 +72,7 @@ func resourceGroupMembershipCreate(d *schema.ResourceData, m interface{}) error 
 		membersToRemove, _ = getGroupMembershipSet(nil)
 	}
 
-	err := applyMembershipUpdate(m.(*config.AggregatedClient),
+	err := applyMembershipUpdate(meta.(*config.AggregatedClient),
 		expandGroupMembers(group, membersToAdd),
 		expandGroupMembers(group, membersToRemove))
 	if err != nil {
@@ -83,7 +83,7 @@ func resourceGroupMembershipCreate(d *schema.ResourceData, m interface{}) error 
 		Pending: []string{"Waiting"},
 		Target:  []string{"Synched"},
 		Refresh: func() (interface{}, string, error) {
-			clients := m.(*config.AggregatedClient)
+			clients := meta.(*config.AggregatedClient)
 			state := "Waiting"
 			actualMemberships, err := getGroupMemberships(clients, group)
 			if err != nil {
@@ -112,10 +112,10 @@ func resourceGroupMembershipCreate(d *schema.ResourceData, m interface{}) error 
 	// The ID for this resource is meaningless so we can just assign a random ID
 	d.SetId(fmt.Sprintf("%d", rand.Int()))
 
-	return resourceGroupMembershipRead(d, m)
+	return resourceGroupMembershipRead(d, meta)
 }
 
-func resourceGroupMembershipUpdate(d *schema.ResourceData, m interface{}) error {
+func resourceGroupMembershipUpdate(d *schema.ResourceData, meta interface{}) error {
 	// Enable partial state mode
 	d.Partial(true)
 
@@ -130,7 +130,7 @@ func resourceGroupMembershipUpdate(d *schema.ResourceData, m interface{}) error 
 	// members that need to be removed will be missing from the new data, but present in the old data
 	membersToRemove := oldData.(*schema.Set).Difference(newData.(*schema.Set))
 
-	err := applyMembershipUpdate(m.(*config.AggregatedClient),
+	err := applyMembershipUpdate(meta.(*config.AggregatedClient),
 		expandGroupMembers(group, membersToAdd),
 		expandGroupMembers(group, membersToRemove))
 	if err != nil {
@@ -145,7 +145,7 @@ func resourceGroupMembershipUpdate(d *schema.ResourceData, m interface{}) error 
 		Pending: []string{"Waiting"},
 		Target:  []string{"Synched"},
 		Refresh: func() (interface{}, string, error) {
-			clients := m.(*config.AggregatedClient)
+			clients := meta.(*config.AggregatedClient)
 			state := "Waiting"
 			actualMemberships, err := getGroupMemberships(clients, group)
 			if err != nil {
@@ -171,7 +171,7 @@ func resourceGroupMembershipUpdate(d *schema.ResourceData, m interface{}) error 
 		return fmt.Errorf("Error waiting for DevOps synching memberships for group  [%s]: %+v", group, err)
 	}
 
-	return resourceGroupMembershipRead(d, m)
+	return resourceGroupMembershipRead(d, meta)
 }
 
 func applyMembershipUpdate(clients *config.AggregatedClient, toAdd *[]graph.GraphMembership, toRemove *[]graph.GraphMembership) error {
@@ -191,8 +191,8 @@ func applyMembershipUpdate(clients *config.AggregatedClient, toAdd *[]graph.Grap
 	return nil
 }
 
-func resourceGroupMembershipDelete(d *schema.ResourceData, m interface{}) error {
-	clients := m.(*config.AggregatedClient)
+func resourceGroupMembershipDelete(d *schema.ResourceData, meta interface{}) error {
+	clients := meta.(*config.AggregatedClient)
 	memberships := expandGroupMembers(d.Get("group").(string), d.Get("members").(*schema.Set))
 
 	err := removeMembers(clients, memberships)
@@ -263,8 +263,8 @@ func buildMembership(group string, member string) *graph.GraphMembership {
 	}
 }
 
-func resourceGroupMembershipRead(d *schema.ResourceData, m interface{}) error {
-	clients := m.(*config.AggregatedClient)
+func resourceGroupMembershipRead(d *schema.ResourceData, meta interface{}) error {
+	clients := meta.(*config.AggregatedClient)
 	group := d.Get("group").(string)
 
 	actualMemberships, err := getGroupMemberships(clients, group)

@@ -117,8 +117,8 @@ func resourceBuildDefinition() *schema.Resource {
 	}
 }
 
-func resourceBuildDefinitionCreate(d *schema.ResourceData, m interface{}) error {
-	clients := m.(*config.AggregatedClient)
+func resourceBuildDefinitionCreate(d *schema.ResourceData, meta interface{}) error {
+	clients := meta.(*config.AggregatedClient)
 	buildDefinition, projectID, err := expandBuildDefinition(d)
 	if err != nil {
 		return fmt.Errorf("Error creating resource Build Definition: %+v", err)
@@ -130,7 +130,7 @@ func resourceBuildDefinitionCreate(d *schema.ResourceData, m interface{}) error 
 	}
 
 	flattenBuildDefinition(d, createdBuildDefinition, projectID)
-	return resourceBuildDefinitionRead(d, m)
+	return resourceBuildDefinitionRead(d, meta)
 }
 
 func flattenBuildDefinition(d *schema.ResourceData, buildDefinition *build.BuildDefinition, projectID string) {
@@ -175,8 +175,8 @@ func createBuildDefinition(clients *config.AggregatedClient, buildDefinition *bu
 	return createdBuild, err
 }
 
-func resourceBuildDefinitionRead(d *schema.ResourceData, m interface{}) error {
-	clients := m.(*config.AggregatedClient)
+func resourceBuildDefinitionRead(d *schema.ResourceData, meta interface{}) error {
+	clients := meta.(*config.AggregatedClient)
 	projectID, buildDefinitionID, err := tfhelper.ParseProjectIDAndResourceID(d)
 
 	if err != nil {
@@ -196,18 +196,18 @@ func resourceBuildDefinitionRead(d *schema.ResourceData, m interface{}) error {
 	return nil
 }
 
-func resourceBuildDefinitionDelete(d *schema.ResourceData, m interface{}) error {
+func resourceBuildDefinitionDelete(d *schema.ResourceData, meta interface{}) error {
 	if d.Id() == "" {
 		return nil
 	}
 
-	clients := m.(*config.AggregatedClient)
+	clients := meta.(*config.AggregatedClient)
 	projectID, buildDefinitionID, err := tfhelper.ParseProjectIDAndResourceID(d)
 	if err != nil {
 		return err
 	}
 
-	err = clients.BuildClient.DeleteDefinition(m.(*config.AggregatedClient).Ctx, build.DeleteDefinitionArgs{
+	err = clients.BuildClient.DeleteDefinition(meta.(*config.AggregatedClient).Ctx, build.DeleteDefinitionArgs{
 		Project:      &projectID,
 		DefinitionId: &buildDefinitionID,
 	})
@@ -215,14 +215,14 @@ func resourceBuildDefinitionDelete(d *schema.ResourceData, m interface{}) error 
 	return err
 }
 
-func resourceBuildDefinitionUpdate(d *schema.ResourceData, m interface{}) error {
-	clients := m.(*config.AggregatedClient)
+func resourceBuildDefinitionUpdate(d *schema.ResourceData, meta interface{}) error {
+	clients := meta.(*config.AggregatedClient)
 	buildDefinition, projectID, err := expandBuildDefinition(d)
 	if err != nil {
 		return err
 	}
 
-	updatedBuildDefinition, err := clients.BuildClient.UpdateDefinition(m.(*config.AggregatedClient).Ctx, build.UpdateDefinitionArgs{
+	updatedBuildDefinition, err := clients.BuildClient.UpdateDefinition(meta.(*config.AggregatedClient).Ctx, build.UpdateDefinitionArgs{
 		Definition:   buildDefinition,
 		Project:      &projectID,
 		DefinitionId: buildDefinition.Id,

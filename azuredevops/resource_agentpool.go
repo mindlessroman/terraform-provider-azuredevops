@@ -47,8 +47,8 @@ func resourceAzureAgentPool() *schema.Resource {
 	}
 }
 
-func resourceAzureAgentPoolCreate(d *schema.ResourceData, m interface{}) error {
-	clients := m.(*config.AggregatedClient)
+func resourceAzureAgentPoolCreate(d *schema.ResourceData, meta interface{}) error {
+	clients := meta.(*config.AggregatedClient)
 	agentPool, err := expandAgentPool(d, true)
 	if err != nil {
 		return fmt.Errorf("Error converting terraform data model to AzDO agentPool reference: %+v", err)
@@ -61,16 +61,16 @@ func resourceAzureAgentPoolCreate(d *schema.ResourceData, m interface{}) error {
 
 	flattenAzureAgentPool(d, createdAgentPool)
 
-	return resourceAzureAgentPoolRead(d, m)
+	return resourceAzureAgentPoolRead(d, meta)
 }
 
-func resourceAzureAgentPoolRead(d *schema.ResourceData, m interface{}) error {
+func resourceAzureAgentPoolRead(d *schema.ResourceData, meta interface{}) error {
 	poolID, err := strconv.Atoi(d.Id())
 	if err != nil {
 		return fmt.Errorf("Error getting agent pool Id: %+v", err)
 	}
 
-	clients := m.(*config.AggregatedClient)
+	clients := meta.(*config.AggregatedClient)
 	agentPool, err := azureAgentPoolRead(clients, poolID)
 	if err != nil {
 		return fmt.Errorf("Error looking up agent pool with ID %d. Error: %v", poolID, err)
@@ -80,8 +80,8 @@ func resourceAzureAgentPoolRead(d *schema.ResourceData, m interface{}) error {
 	return nil
 }
 
-func resourceAzureAgentPoolUpdate(d *schema.ResourceData, m interface{}) error {
-	clients := m.(*config.AggregatedClient)
+func resourceAzureAgentPoolUpdate(d *schema.ResourceData, meta interface{}) error {
+	clients := meta.(*config.AggregatedClient)
 	agentPool, err := expandAgentPool(d, false)
 	if err != nil {
 		return fmt.Errorf("Error converting terraform data model to AzDO agent pool reference: %+v", err)
@@ -92,16 +92,16 @@ func resourceAzureAgentPoolUpdate(d *schema.ResourceData, m interface{}) error {
 		return fmt.Errorf("Error updating agent pool in Azure DevOps: %+v", err)
 	}
 
-	return resourceAzureAgentPoolRead(d, m)
+	return resourceAzureAgentPoolRead(d, meta)
 }
 
-func resourceAzureAgentPoolDelete(d *schema.ResourceData, m interface{}) error {
+func resourceAzureAgentPoolDelete(d *schema.ResourceData, meta interface{}) error {
 	poolID, err := strconv.Atoi(d.Id())
 	if err != nil {
 		return fmt.Errorf("Error getting agent pool Id: %+v", err)
 	}
 
-	clients := m.(*config.AggregatedClient)
+	clients := meta.(*config.AggregatedClient)
 	return clients.TaskAgentClient.DeleteAgentPool(clients.Ctx, taskagent.DeleteAgentPoolArgs{
 		PoolId: &poolID,
 	})

@@ -122,8 +122,8 @@ type repoInitializationMeta struct {
 	sourceURL  string
 }
 
-func resourceGitRepositoryCreate(d *schema.ResourceData, m interface{}) error {
-	clients := m.(*config.AggregatedClient)
+func resourceGitRepositoryCreate(d *schema.ResourceData, meta interface{}) error {
+	clients := meta.(*config.AggregatedClient)
 	repo, initialization, projectID, err := expandGitRepository(d)
 	if err != nil {
 		return fmt.Errorf("Error expanding repository resource data: %+v", err)
@@ -158,7 +158,7 @@ func resourceGitRepositoryCreate(d *schema.ResourceData, m interface{}) error {
 	}
 
 	d.SetId(createdRepo.Id.String())
-	return resourceGitRepositoryRead(d, m)
+	return resourceGitRepositoryRead(d, meta)
 }
 
 func createGitRepository(clients *config.AggregatedClient, repoName *string, projectID *uuid.UUID, parentRepo *git.GitRepositoryRef) (*git.GitRepository, error) {
@@ -215,12 +215,12 @@ func initializeGitRepository(clients *config.AggregatedClient, repo *git.GitRepo
 	return err
 }
 
-func resourceGitRepositoryRead(d *schema.ResourceData, m interface{}) error {
+func resourceGitRepositoryRead(d *schema.ResourceData, meta interface{}) error {
 	repoID := d.Id()
 	repoName := d.Get("name").(string)
 	projectID := d.Get("project_id").(string)
 
-	clients := m.(*config.AggregatedClient)
+	clients := meta.(*config.AggregatedClient)
 	repo, err := gitRepositoryRead(clients, repoID, repoName, projectID)
 	if err != nil {
 		return fmt.Errorf("Error looking up repository with ID %s and Name %s. Error: %v", repoID, repoName, err)
@@ -230,8 +230,8 @@ func resourceGitRepositoryRead(d *schema.ResourceData, m interface{}) error {
 	return nil
 }
 
-func resourceGitRepositoryUpdate(d *schema.ResourceData, m interface{}) error {
-	clients := m.(*config.AggregatedClient)
+func resourceGitRepositoryUpdate(d *schema.ResourceData, meta interface{}) error {
+	clients := meta.(*config.AggregatedClient)
 	repo, _, projectID, err := expandGitRepository(d)
 	if err != nil {
 		return fmt.Errorf("Error converting terraform data model to AzDO project reference: %+v", err)
@@ -242,7 +242,7 @@ func resourceGitRepositoryUpdate(d *schema.ResourceData, m interface{}) error {
 		return fmt.Errorf("Error updating repository in Azure DevOps: %+v", err)
 	}
 
-	return resourceGitRepositoryRead(d, m)
+	return resourceGitRepositoryRead(d, meta)
 }
 
 func updateGitRepository(clients *config.AggregatedClient, repository *git.GitRepository, project *uuid.UUID) (*git.GitRepository, error) {
@@ -259,9 +259,9 @@ func updateGitRepository(clients *config.AggregatedClient, repository *git.GitRe
 		})
 }
 
-func resourceGitRepositoryDelete(d *schema.ResourceData, m interface{}) error {
+func resourceGitRepositoryDelete(d *schema.ResourceData, meta interface{}) error {
 	repoID := d.Id()
-	clients := m.(*config.AggregatedClient)
+	clients := meta.(*config.AggregatedClient)
 	err := deleteGitRepository(clients, repoID)
 	if err != nil {
 		return err

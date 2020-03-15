@@ -262,7 +262,7 @@ If you need to modify the business logic in an existing resource or data source,
 The prototype of these functions are all quite similar. Here is an example of a create function. Keep note of the following details:
 
  - `d *schema.ResourceData` is passed to the provider by Terraform. It contains the resource configuration specified by the client using the provider, along with any data pulled from the Terraform state.
- - `m interface{}` is, in the case of this provider, a structure containing all of the (intialized) clients needed to make API calls to Azure DevOps.
+ - `meta interface{}` is, in the case of this provider, a structure containing all of the (intialized) clients needed to make API calls to Azure DevOps.
  - [Flatten/Expand](https://learn.hashicorp.com/terraform/development/writing-custom-terraform-providers#implementing-a-more-complex-read) is a common "idiom" used across terraform providers. It is a standard approach to marshaling and unmarshaling API data structures into the internal terraform state.
 
 ![image](https://user-images.githubusercontent.com/2497673/67520284-217a2800-f66e-11e9-87c8-2f87e882eaca.png)

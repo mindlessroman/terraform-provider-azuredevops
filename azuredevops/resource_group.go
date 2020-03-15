@@ -184,8 +184,8 @@ func azDOGraphCreateGroup(ctx context.Context, client graph.Client, args azDOGra
 	panic("Invalid Azure DevOps Graph client implementation")
 }
 
-func resourceGroupCreate(d *schema.ResourceData, m interface{}) error {
-	clients := m.(*config.AggregatedClient)
+func resourceGroupCreate(d *schema.ResourceData, meta interface{}) error {
+	clients := meta.(*config.AggregatedClient)
 
 	// using: POST https://vssps.dev.azure.com/{organization}/_apis/graph/groups?api-version=5.1-preview.1
 	cga := azDOGraphCreateGroupArgs{}
@@ -250,11 +250,11 @@ func resourceGroupCreate(d *schema.ResourceData, m interface{}) error {
 
 	d.SetId(*group.Descriptor)
 
-	return resourceGroupRead(d, m)
+	return resourceGroupRead(d, meta)
 }
 
-func resourceGroupRead(d *schema.ResourceData, m interface{}) error {
-	clients := m.(*config.AggregatedClient)
+func resourceGroupRead(d *schema.ResourceData, meta interface{}) error {
+	clients := meta.(*config.AggregatedClient)
 
 	// using: GET https://vssps.dev.azure.com/{organization}/_apis/graph/groups/{groupDescriptor}?api-version=5.1-preview.1
 	// d.Get("descriptor").(string) => {groupDescriptor}
@@ -276,8 +276,8 @@ func resourceGroupRead(d *schema.ResourceData, m interface{}) error {
 	return flattenGroup(d, group, members)
 }
 
-func resourceGroupUpdate(d *schema.ResourceData, m interface{}) error {
-	clients := m.(*config.AggregatedClient)
+func resourceGroupUpdate(d *schema.ResourceData, meta interface{}) error {
+	clients := meta.(*config.AggregatedClient)
 
 	// using: PATCH https://vssps.dev.azure.com/{organization}/_apis/graph/groups/{groupDescriptor}?api-version=5.1-preview.1
 	// d.Get("descriptor").(string) => {groupDescriptor}
@@ -313,7 +313,7 @@ func resourceGroupUpdate(d *schema.ResourceData, m interface{}) error {
 		membersToAdd := newData.(*schema.Set).Difference(oldData.(*schema.Set))
 		// members that need to be removed will be missing from the new data, but present in the old data
 		membersToRemove := oldData.(*schema.Set).Difference(newData.(*schema.Set))
-		if err := applyMembershipUpdate(m.(*config.AggregatedClient),
+		if err := applyMembershipUpdate(meta.(*config.AggregatedClient),
 			expandGroupMembers(group, membersToAdd),
 			expandGroupMembers(group, membersToRemove)); err != nil {
 			return err
@@ -323,11 +323,11 @@ func resourceGroupUpdate(d *schema.ResourceData, m interface{}) error {
 	}
 
 	d.Partial(false)
-	return resourceGroupRead(d, m)
+	return resourceGroupRead(d, meta)
 }
 
-func resourceGroupDelete(d *schema.ResourceData, m interface{}) error {
-	clients := m.(*config.AggregatedClient)
+func resourceGroupDelete(d *schema.ResourceData, meta interface{}) error {
+	clients := meta.(*config.AggregatedClient)
 
 	// using: DELETE https://vssps.dev.azure.com/{organization}/_apis/graph/groups/{groupDescriptor}?api-version=5.1-preview.1
 	// d.Get("descriptor").(string) => {groupDescriptor}

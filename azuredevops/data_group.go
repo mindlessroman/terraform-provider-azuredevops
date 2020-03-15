@@ -43,8 +43,8 @@ func dataGroup() *schema.Resource {
 //	(2) Query for all AzDO groups that exist within the project. This leverages the AzDO graph descriptor for the project.
 //		This involves querying a paginated API, so multiple API calls may be needed for this step.
 //	(3) Select group that has the name identified by the schema
-func dataSourceGroupRead(d *schema.ResourceData, m interface{}) error {
-	clients := m.(*config.AggregatedClient)
+func dataSourceGroupRead(d *schema.ResourceData, meta interface{}) error {
+	clients := meta.(*config.AggregatedClient)
 	groupName, projectID := d.Get("name").(string), d.Get("project_id").(string)
 
 	projectDescriptor, err := getProjectDescriptor(clients, projectID)

@@ -81,8 +81,8 @@ func resourceProject() *schema.Resource {
 	}
 }
 
-func resourceProjectCreate(d *schema.ResourceData, m interface{}) error {
-	clients := m.(*config.AggregatedClient)
+func resourceProjectCreate(d *schema.ResourceData, meta interface{}) error {
+	clients := meta.(*config.AggregatedClient)
 	project, err := expandProject(clients, d, true)
 	if err != nil {
 		return fmt.Errorf("Error converting terraform data model to Azure DevOps project reference: %+v", err)
@@ -94,7 +94,7 @@ func resourceProjectCreate(d *schema.ResourceData, m interface{}) error {
 	}
 
 	d.Set("project_name", project.Name)
-	return resourceProjectRead(d, m)
+	return resourceProjectRead(d, meta)
 }
 
 // Make API call to create the project and wait for an async success/fail response from the service
@@ -142,8 +142,8 @@ func waitForAsyncOperationSuccess(clients *config.AggregatedClient, operationRef
 	}
 }
 
-func resourceProjectRead(d *schema.ResourceData, m interface{}) error {
-	clients := m.(*config.AggregatedClient)
+func resourceProjectRead(d *schema.ResourceData, meta interface{}) error {
+	clients := meta.(*config.AggregatedClient)
 
 	id := d.Id()
 	name := d.Get("project_name").(string)
@@ -175,8 +175,8 @@ func ProjectRead(clients *config.AggregatedClient, projectID string, projectName
 	})
 }
 
-func resourceProjectUpdate(d *schema.ResourceData, m interface{}) error {
-	clients := m.(*config.AggregatedClient)
+func resourceProjectUpdate(d *schema.ResourceData, meta interface{}) error {
+	clients := meta.(*config.AggregatedClient)
 	project, err := expandProject(clients, d, false)
 	if err != nil {
 		return fmt.Errorf("Error converting terraform data model to AzDO project reference: %+v", err)
@@ -186,7 +186,7 @@ func resourceProjectUpdate(d *schema.ResourceData, m interface{}) error {
 	if err != nil {
 		return fmt.Errorf("Error updating project: %v", err)
 	}
-	return resourceProjectRead(d, m)
+	return resourceProjectRead(d, meta)
 }
 
 func updateProject(clients *config.AggregatedClient, project *core.TeamProject, timeoutSeconds time.Duration) error {
@@ -205,8 +205,8 @@ func updateProject(clients *config.AggregatedClient, project *core.TeamProject, 
 	return waitForAsyncOperationSuccess(clients, operationRef, timeoutSeconds)
 }
 
-func resourceProjectDelete(d *schema.ResourceData, m interface{}) error {
-	clients := m.(*config.AggregatedClient)
+func resourceProjectDelete(d *schema.ResourceData, meta interface{}) error {
+	clients := meta.(*config.AggregatedClient)
 	id := d.Id()
 
 	err := deleteProject(clients, id, projectDeleteTimeoutDuration)

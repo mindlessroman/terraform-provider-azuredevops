@@ -84,8 +84,8 @@ func getProjectHash(v interface{}) int {
 	return hashcode.String(v.(map[string]interface{})["project_id"].(string))
 }
 
-func dataSourceProjectsRead(d *schema.ResourceData, m interface{}) error {
-	clients := m.(*config.AggregatedClient)
+func dataSourceProjectsRead(d *schema.ResourceData, meta interface{}) error {
+	clients := meta.(*config.AggregatedClient)
 	state := d.Get("state").(string)
 	name := d.Get("project_name").(string)
 

@@ -98,8 +98,8 @@ func getGitRepositoryHash(v interface{}) int {
 	return hashcode.String(v.(map[string]interface{})["id"].(string))
 }
 
-func dataSourceGitRepositoriesRead(d *schema.ResourceData, m interface{}) error {
-	clients := m.(*config.AggregatedClient)
+func dataSourceGitRepositoriesRead(d *schema.ResourceData, meta interface{}) error {
+	clients := meta.(*config.AggregatedClient)
 
 	projectRepos, err := getGitRepositoriesByNameAndProject(d, clients)
 	if err != nil {

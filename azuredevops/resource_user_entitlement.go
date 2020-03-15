@@ -58,8 +58,8 @@ func resourceUserEntitlement() *schema.Resource {
 	}
 }
 
-func resourceUserEntitlementCreate(d *schema.ResourceData, m interface{}) error {
-	clients := m.(*config.AggregatedClient)
+func resourceUserEntitlementCreate(d *schema.ResourceData, meta interface{}) error {
+	clients := meta.(*config.AggregatedClient)
 	userEntitlement, err := expandUserEntitlement(d)
 	if err != nil {
 		return fmt.Errorf("Error creating user entitlement: %v", err)
@@ -71,7 +71,7 @@ func resourceUserEntitlementCreate(d *schema.ResourceData, m interface{}) error 
 	}
 
 	flattenUserEntitlement(d, addedUserEntitlement)
-	return resourceUserEntitlementRead(d, m)
+	return resourceUserEntitlementRead(d, meta)
 }
 
 func expandUserEntitlement(d *schema.ResourceData) (*memberentitlementmanagement.UserEntitlement, error) {
@@ -135,8 +135,8 @@ func addUserEntitlement(clients *config.AggregatedClient, userEntitlement *membe
 	return userEntitlementsPostResponse.UserEntitlement, nil
 }
 
-func resourceUserEntitlementRead(d *schema.ResourceData, m interface{}) error {
-	clients := m.(*config.AggregatedClient)
+func resourceUserEntitlementRead(d *schema.ResourceData, meta interface{}) error {
+	clients := meta.(*config.AggregatedClient)
 	userEntitlementID := d.Id()
 	id, err := uuid.Parse(userEntitlementID)
 	if err != nil {
@@ -159,7 +159,7 @@ func readUserEntitlement(clients *config.AggregatedClient, id *uuid.UUID) (*memb
 	})
 }
 
-func resourceUserEntitlementDelete(d *schema.ResourceData, m interface{}) error {
+func resourceUserEntitlementDelete(d *schema.ResourceData, meta interface{}) error {
 	if d.Id() == "" {
 		return nil
 	}
@@ -169,9 +169,9 @@ func resourceUserEntitlementDelete(d *schema.ResourceData, m interface{}) error 
 		return fmt.Errorf("Error parsing UserEntitlement ID. UserEntitlementID: %s. %v", userEntitlementID, err)
 	}
 
-	clients := m.(*config.AggregatedClient)
+	clients := meta.(*config.AggregatedClient)
 
-	err = clients.MemberEntitleManagementClient.DeleteUserEntitlement(m.(*config.AggregatedClient).Ctx, memberentitlementmanagement.DeleteUserEntitlementArgs{
+	err = clients.MemberEntitleManagementClient.DeleteUserEntitlement(meta.(*config.AggregatedClient).Ctx, memberentitlementmanagement.DeleteUserEntitlementArgs{
 		UserId: &id,
 	})
 

@@ -51,11 +51,11 @@ Next, add an `attach-to-process` configuration your `launch.json` file. The foll
 Now, we need to modify your provider to pause for a moment to give us time to attach a debugger. Insert a call to `time.Sleep()` somewhere in the codepath before there point where you want to debug, e.g.
 
 ~~~
-func resourceFooCreate(d *schema.ResourceData, m interface{}) error {
+func resourceFooCreate(d *schema.ResourceData, meta interface{}) error {
 	time.Sleep(60 * time.Second)
 	fookey := d.Get("fookey").(string)
 	d.SetId(fookey)
-	return resourceFooRead(d, m)
+	return resourceFooRead(d, meta)
 }
 ~~~
 
