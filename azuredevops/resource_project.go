@@ -73,7 +73,6 @@ func resourceProject() *schema.Resource {
 			},
 			"process_template_id": {
 				Type:        schema.TypeString,
-				ForceNew:    true,
 				Computed:    true,
 				Description: "The ID of the work item template chosen",
 			},

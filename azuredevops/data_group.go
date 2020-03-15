@@ -17,14 +17,12 @@ func dataGroup() *schema.Resource {
 		Schema: map[string]*schema.Schema{
 			"name": {
 				Type:         schema.TypeString,
-				ForceNew:     true,
 				Required:     true,
 				ValidateFunc: validation.NoZeroValues,
 				Description:  "The Group Name",
 			},
 			"project_id": {
 				Type:         schema.TypeString,
-				ForceNew:     true,
 				Required:     true,
 				ValidateFunc: validation.NoZeroValues,
 				Description:  "ID of the project in which to search for the group",

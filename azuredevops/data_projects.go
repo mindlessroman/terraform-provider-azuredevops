@@ -23,7 +23,6 @@ func dataProjects() *schema.Resource {
 		Schema: map[string]*schema.Schema{
 			"project_name": {
 				Type:             schema.TypeString,
-				ForceNew:         true,
 				Optional:         true,
 				ValidateFunc:     validate.NoEmptyStrings,
 				DiffSuppressFunc: suppress.CaseDifference,
@@ -31,7 +30,6 @@ func dataProjects() *schema.Resource {
 			},
 			"state": {
 				Type:     schema.TypeString,
-				ForceNew: true,
 				Optional: true,
 				Default:  "all",
 				ValidateFunc: validation.StringInSlice([]string{
