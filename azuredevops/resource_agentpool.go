@@ -138,8 +138,8 @@ func azureAgentPoolUpdate(clients *config.AggregatedClient, agentPool *taskagent
 func flattenAzureAgentPool(d *schema.ResourceData, agentPool *taskagent.TaskAgentPool) {
 	d.SetId(strconv.Itoa(*agentPool.Id))
 	d.Set("name", converter.ToString(agentPool.Name, ""))
-	d.Set("pool_type", *agentPool.PoolType)
-	d.Set("auto_provision", *agentPool.AutoProvision)
+	d.Set("pool_type", agentPool.PoolType)
+	d.Set("auto_provision", agentPool.AutoProvision)
 }
 
 func expandAgentPool(d *schema.ResourceData, forCreate bool) (*taskagent.TaskAgentPool, error) {

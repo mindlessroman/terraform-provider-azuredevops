@@ -112,7 +112,7 @@ func expandUserEntitlement(d *schema.ResourceData) (*memberentitlementmanagement
 
 func flattenUserEntitlement(d *schema.ResourceData, userEntitlement *memberentitlementmanagement.UserEntitlement) {
 	d.SetId(userEntitlement.Id.String())
-	d.Set("descriptor", *userEntitlement.User.Descriptor)
+	d.Set("descriptor", userEntitlement.User.Descriptor)
 }
 
 func addUserEntitlement(clients *config.AggregatedClient, userEntitlement *memberentitlementmanagement.UserEntitlement) (*memberentitlementmanagement.UserEntitlement, error) {

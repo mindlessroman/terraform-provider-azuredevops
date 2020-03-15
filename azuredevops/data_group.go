@@ -63,7 +63,7 @@ func dataSourceGroupRead(d *schema.ResourceData, m interface{}) error {
 	}
 
 	d.SetId(*targetGroup.Descriptor)
-	d.Set("descriptor", *targetGroup.Descriptor)
+	d.Set("descriptor", targetGroup.Descriptor)
 	return nil
 }
 

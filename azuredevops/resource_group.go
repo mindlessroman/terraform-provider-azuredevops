@@ -373,37 +373,37 @@ func expandGroup(d *schema.ResourceData) (*graph.GraphGroup, *[]graph.GraphMembe
 func flattenGroup(d *schema.ResourceData, group *graph.GraphGroup, members *[]graph.GraphMembership) error {
 
 	if group.Descriptor != nil {
-		d.Set("descriptor", *group.Descriptor)
+		d.Set("descriptor", group.Descriptor)
 		d.SetId(*group.Descriptor)
 	} else {
 		return fmt.Errorf("Group Object does not contain a descriptor")
 	}
 	if group.DisplayName != nil {
-		d.Set("display_name", *group.DisplayName)
+		d.Set("display_name", group.DisplayName)
 	}
 	if group.Url != nil {
-		d.Set("url", *group.Url)
+		d.Set("url", group.Url)
 	}
 	if group.Origin != nil {
-		d.Set("origin", *group.Origin)
+		d.Set("origin", group.Origin)
 	}
 	if group.OriginId != nil {
-		d.Set("origin_id", *group.OriginId)
+		d.Set("origin_id", group.OriginId)
 	}
 	if group.SubjectKind != nil {
-		d.Set("subject_kind", *group.SubjectKind)
+		d.Set("subject_kind", group.SubjectKind)
 	}
 	if group.Domain != nil {
-		d.Set("domain", *group.Domain)
+		d.Set("domain", group.Domain)
 	}
 	if group.MailAddress != nil {
-		d.Set("mail", *group.MailAddress)
+		d.Set("mail", group.MailAddress)
 	}
 	if group.PrincipalName != nil {
-		d.Set("principal_name", *group.PrincipalName)
+		d.Set("principal_name", group.PrincipalName)
 	}
 	if group.Description != nil {
-		d.Set("description", *group.Description)
+		d.Set("description", group.Description)
 	}
 	if members != nil {
 		dMembers := make([]string, len(*members))

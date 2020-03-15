@@ -263,8 +263,8 @@ func expandVariableGroupParameters(d *schema.ResourceData) (*taskagent.VariableG
 // Convert AzDO data structure to internal Terraform data structure
 func flattenVariableGroup(d *schema.ResourceData, variableGroup *taskagent.VariableGroup, projectID *string) {
 	d.SetId(fmt.Sprintf("%d", *variableGroup.Id))
-	d.Set("name", *variableGroup.Name)
-	d.Set("description", *variableGroup.Description)
+	d.Set("name", variableGroup.Name)
+	d.Set("description", variableGroup.Description)
 	d.Set("variable", flattenVariables(variableGroup))
 	d.Set("project_id", projectID)
 }
