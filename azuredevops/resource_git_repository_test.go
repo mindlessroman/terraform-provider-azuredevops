@@ -293,7 +293,7 @@ func TestAccAzureGitRepo_CreateAndUpdate(t *testing.T) {
 		CheckDestroy: testAccAzureGitRepoCheckDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testhelper.AccTest_HCL_AzureGitRepoResource(projectName, gitRepoNameFirst, "Uninitialized"),
+				Config: testhelper.AccTestHCLAzureGitRepoResource(projectName, gitRepoNameFirst, "Uninitialized"),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet(tfRepoNode, "project_id"),
 					resource.TestCheckResourceAttr(tfRepoNode, "name", gitRepoNameFirst),
@@ -307,7 +307,7 @@ func TestAccAzureGitRepo_CreateAndUpdate(t *testing.T) {
 				),
 			},
 			{
-				Config: testhelper.AccTest_HCL_AzureGitRepoResource(projectName, gitRepoNameSecond, "Uninitialized"),
+				Config: testhelper.AccTestHCLAzureGitRepoResource(projectName, gitRepoNameSecond, "Uninitialized"),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet(tfRepoNode, "project_id"),
 					resource.TestCheckResourceAttr(tfRepoNode, "name", gitRepoNameSecond),
@@ -385,7 +385,7 @@ func TestAccAzureGitRepo_RepoInitialization_Clean(t *testing.T) {
 		CheckDestroy: testAccAzureGitRepoCheckDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testhelper.AccTest_HCL_AzureGitRepoResource(projectName, gitRepoName, "Clean"),
+				Config: testhelper.AccTestHCLAzureGitRepoResource(projectName, gitRepoName, "Clean"),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet(tfRepoNode, "project_id"),
 					resource.TestCheckResourceAttr(tfRepoNode, "name", gitRepoName),
@@ -410,7 +410,7 @@ func TestAccAzureGitRepo_RepoInitialization_Uninitialized(t *testing.T) {
 		CheckDestroy: testAccAzureGitRepoCheckDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testhelper.AccTest_HCL_AzureGitRepoResource(projectName, gitRepoName, "Uninitialized"),
+				Config: testhelper.AccTestHCLAzureGitRepoResource(projectName, gitRepoName, "Uninitialized"),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet(tfRepoNode, "project_id"),
 					resource.TestCheckResourceAttr(tfRepoNode, "name", gitRepoName),

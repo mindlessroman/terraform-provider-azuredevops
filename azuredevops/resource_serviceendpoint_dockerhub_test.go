@@ -185,7 +185,7 @@ func TestAccAzureDevOpsServiceEndpointDockerHub_CreateAndUpdate(t *testing.T) {
 		CheckDestroy: testAccServiceEndpointDockerHubCheckDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testhelper.AccTest_HCL_ServiceEndpointDockerHubResource(projectName, serviceEndpointNameFirst),
+				Config: testhelper.AccTestHCLServiceEndpointDockerHubResource(projectName, serviceEndpointNameFirst),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet(tfSvcEpNode, "project_id"),
 					resource.TestCheckResourceAttrSet(tfSvcEpNode, "docker_username"),
@@ -196,7 +196,7 @@ func TestAccAzureDevOpsServiceEndpointDockerHub_CreateAndUpdate(t *testing.T) {
 					testAccCheckServiceEndpointDockerHubResourceExists(serviceEndpointNameFirst),
 				),
 			}, {
-				Config: testhelper.AccTest_HCL_ServiceEndpointDockerHubResource(projectName, serviceEndpointNameSecond),
+				Config: testhelper.AccTestHCLServiceEndpointDockerHubResource(projectName, serviceEndpointNameSecond),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet(tfSvcEpNode, "project_id"),
 					resource.TestCheckResourceAttrSet(tfSvcEpNode, "docker_username"),

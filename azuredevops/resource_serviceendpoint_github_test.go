@@ -175,7 +175,7 @@ func TestAccAzureDevOpsServiceEndpointGitHub_CreateAndUpdate(t *testing.T) {
 		CheckDestroy: testAccServiceEndpointGitHubCheckDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testhelper.AccTest_HCL_ServiceEndpointGitHubResource(projectName, serviceEndpointNameFirst),
+				Config: testhelper.AccTestHCLServiceEndpointGitHubResource(projectName, serviceEndpointNameFirst),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet(tfSvcEpNode, "project_id"),
 					resource.TestCheckResourceAttr(tfSvcEpNode, "auth_personal.#", "1"),
@@ -184,7 +184,7 @@ func TestAccAzureDevOpsServiceEndpointGitHub_CreateAndUpdate(t *testing.T) {
 					testAccCheckServiceEndpointGitHubResourceExists(serviceEndpointNameFirst),
 				),
 			}, {
-				Config: testhelper.AccTest_HCL_ServiceEndpointGitHubResource(projectName, serviceEndpointNameSecond),
+				Config: testhelper.AccTestHCLServiceEndpointGitHubResource(projectName, serviceEndpointNameSecond),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet(tfSvcEpNode, "project_id"),
 					resource.TestCheckResourceAttr(tfSvcEpNode, "auth_personal.#", "1"),

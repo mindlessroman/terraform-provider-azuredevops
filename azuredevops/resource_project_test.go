@@ -298,7 +298,7 @@ func TestAccAzureDevOpsProject_CreateAndUpdate(t *testing.T) {
 		CheckDestroy: testAccProjectCheckDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testhelper.AccTest_HCL_ProjectResource(projectNameFirst),
+				Config: testhelper.AccTestHCLProjectResource(projectNameFirst),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet(tfNode, "process_template_id"),
 					resource.TestCheckResourceAttr(tfNode, "project_name", projectNameFirst),
@@ -309,7 +309,7 @@ func TestAccAzureDevOpsProject_CreateAndUpdate(t *testing.T) {
 				),
 			},
 			{
-				Config: testhelper.AccTest_HCL_ProjectResource(projectNameSecond),
+				Config: testhelper.AccTestHCLProjectResource(projectNameSecond),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet(tfNode, "process_template_id"),
 					resource.TestCheckResourceAttr(tfNode, "project_name", projectNameSecond),

@@ -6,6 +6,10 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"strings"
+	"testing"
+	"time"
+
 	"github.com/golang/mock/gomock"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
@@ -15,9 +19,6 @@ import (
 	"github.com/microsoft/terraform-provider-azuredevops/azuredevops/utils/config"
 	"github.com/microsoft/terraform-provider-azuredevops/azuredevops/utils/converter"
 	"github.com/stretchr/testify/require"
-	"strings"
-	"testing"
-	"time"
 )
 
 /**
@@ -113,8 +114,8 @@ func TestGroupMembership_Read_DoesNotSwallowErrors(t *testing.T) {
 	groupName := "Build Administrators"
 	tfNode := "azuredevops_group_membership.membership"
 
-	tfStanzaWithMembership := AccTest_HCL_GroupMembershipResource(projectName, groupName, userPrincipalName)
-	tfStanzaWithoutMembership := AccTest_HCL_GroupMembershipDependencies(projectName, groupName, userPrincipalName)
+	tfStanzaWithMembership := AccTestHCLGroupMembershipResource(projectName, groupName, userPrincipalName)
+	tfStanzaWithoutMembership := AccTestHCLGroupMembershipDependencies(projectName, groupName, userPrincipalName)
 
 	// 	// This test differs from most other acceptance tests in the following ways:
 	// 	//	- The second step is the same as the first except it omits the group membershp.

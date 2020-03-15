@@ -199,7 +199,7 @@ func TestAccAzureDevOpsAgentPool_CreateAndUpdate(t *testing.T) {
 		CheckDestroy: testAccAgentPoolCheckDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testhelper.AccTest_HCL_AgentPoolResource(poolNameFirst),
+				Config: testhelper.AccTestHCLAgentPoolResource(poolNameFirst),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(tfNode, "name", poolNameFirst),
 					resource.TestCheckResourceAttr(tfNode, "auto_provision", "false"),
@@ -208,7 +208,7 @@ func TestAccAzureDevOpsAgentPool_CreateAndUpdate(t *testing.T) {
 				),
 			},
 			{
-				Config: testhelper.AccTest_HCL_AgentPoolResource(poolNameSecond),
+				Config: testhelper.AccTestHCLAgentPoolResource(poolNameSecond),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(tfNode, "name", poolNameSecond),
 					resource.TestCheckResourceAttr(tfNode, "auto_provision", "false"),

@@ -212,7 +212,7 @@ func TestAccAzureDevOpsUserEntitlement_Create(t *testing.T) {
 		CheckDestroy: testAccUserEntitlementCheckDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testhelper.AccTest_HCL_UserEntitlementResource(principalName),
+				Config: testhelper.AccTestHCLUserEntitlementResource(principalName),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet(tfNode, "descriptor"),
 					testAccCheckUserEntitlementResourceExists(principalName),

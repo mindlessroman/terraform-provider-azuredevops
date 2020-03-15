@@ -6,11 +6,12 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"strconv"
+	"testing"
+
 	"github.com/microsoft/terraform-provider-azuredevops/azdosdkmocks"
 	"github.com/microsoft/terraform-provider-azuredevops/azuredevops/utils/converter"
 	"github.com/microsoft/terraform-provider-azuredevops/azuredevops/utils/testhelper"
-	"strconv"
-	"testing"
 
 	"github.com/golang/mock/gomock"
 	"github.com/google/uuid"
@@ -229,7 +230,7 @@ func TestAccAzureDevOpsBuildDefinition_CreateAndUpdate(t *testing.T) {
 		CheckDestroy: testAccBuildDefinitionCheckDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testhelper.AccTest_HCL_BuildDefinitionResource(projectName, buildDefinitionNameFirst, buildDefinitionPathEmpty),
+				Config: testhelper.AccTestHCLBuildDefinitionResource(projectName, buildDefinitionNameFirst, buildDefinitionPathEmpty),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet(tfBuildDefNode, "project_id"),
 					resource.TestCheckResourceAttrSet(tfBuildDefNode, "revision"),
@@ -238,7 +239,7 @@ func TestAccAzureDevOpsBuildDefinition_CreateAndUpdate(t *testing.T) {
 					testAccCheckBuildDefinitionResourceExists(buildDefinitionNameFirst),
 				),
 			}, {
-				Config: testhelper.AccTest_HCL_BuildDefinitionResource(projectName, buildDefinitionNameSecond, buildDefinitionPathEmpty),
+				Config: testhelper.AccTestHCLBuildDefinitionResource(projectName, buildDefinitionNameSecond, buildDefinitionPathEmpty),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet(tfBuildDefNode, "project_id"),
 					resource.TestCheckResourceAttrSet(tfBuildDefNode, "revision"),
@@ -247,7 +248,7 @@ func TestAccAzureDevOpsBuildDefinition_CreateAndUpdate(t *testing.T) {
 					testAccCheckBuildDefinitionResourceExists(buildDefinitionNameSecond),
 				),
 			}, {
-				Config: testhelper.AccTest_HCL_BuildDefinitionResource(projectName, buildDefinitionNameFirst, buildDefinitionPathFirst),
+				Config: testhelper.AccTestHCLBuildDefinitionResource(projectName, buildDefinitionNameFirst, buildDefinitionPathFirst),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet(tfBuildDefNode, "project_id"),
 					resource.TestCheckResourceAttrSet(tfBuildDefNode, "revision"),
@@ -256,7 +257,7 @@ func TestAccAzureDevOpsBuildDefinition_CreateAndUpdate(t *testing.T) {
 					testAccCheckBuildDefinitionResourceExists(buildDefinitionNameFirst),
 				),
 			}, {
-				Config: testhelper.AccTest_HCL_BuildDefinitionResource(projectName, buildDefinitionNameFirst,
+				Config: testhelper.AccTestHCLBuildDefinitionResource(projectName, buildDefinitionNameFirst,
 					buildDefinitionPathSecond),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet(tfBuildDefNode, "project_id"),
@@ -266,7 +267,7 @@ func TestAccAzureDevOpsBuildDefinition_CreateAndUpdate(t *testing.T) {
 					testAccCheckBuildDefinitionResourceExists(buildDefinitionNameFirst),
 				),
 			}, {
-				Config: testhelper.AccTest_HCL_BuildDefinitionResource(projectName, buildDefinitionNameFirst, buildDefinitionPathThird),
+				Config: testhelper.AccTestHCLBuildDefinitionResource(projectName, buildDefinitionNameFirst, buildDefinitionPathThird),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet(tfBuildDefNode, "project_id"),
 					resource.TestCheckResourceAttrSet(tfBuildDefNode, "revision"),
@@ -275,7 +276,7 @@ func TestAccAzureDevOpsBuildDefinition_CreateAndUpdate(t *testing.T) {
 					testAccCheckBuildDefinitionResourceExists(buildDefinitionNameFirst),
 				),
 			}, {
-				Config: testhelper.AccTest_HCL_BuildDefinitionResource(projectName, buildDefinitionNameFirst, buildDefinitionPathFourth),
+				Config: testhelper.AccTestHCLBuildDefinitionResource(projectName, buildDefinitionNameFirst, buildDefinitionPathFourth),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet(tfBuildDefNode, "project_id"),
 					resource.TestCheckResourceAttrSet(tfBuildDefNode, "revision"),

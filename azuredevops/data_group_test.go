@@ -5,11 +5,12 @@ package azuredevops
 import (
 	"context"
 	"errors"
+	"testing"
+
 	"github.com/microsoft/terraform-provider-azuredevops/azdosdkmocks"
 	"github.com/microsoft/terraform-provider-azuredevops/azuredevops/utils/config"
 	"github.com/microsoft/terraform-provider-azuredevops/azuredevops/utils/converter"
 	"github.com/microsoft/terraform-provider-azuredevops/azuredevops/utils/testhelper"
-	"testing"
 
 	"github.com/golang/mock/gomock"
 	"github.com/google/uuid"
@@ -153,7 +154,7 @@ func createResourceData(t *testing.T, projectID string, groupName string) *schem
 
 // Validates that a configuration containing a project group lookup is able to read the resource correctly.
 // Because this is a data source, there are no resources to inspect in AzDO
-func AccTest_HCL_GroupDataSource_Read_HappyPath(t *testing.T) {
+func AccTestHCLGroupDataSource_Read_HappyPath(t *testing.T) {
 	projectName := testAccResourcePrefix + acctest.RandStringFromCharSet(10, acctest.CharSetAlphaNum)
 	group := "Build Administrators"
 	tfBuildDefNode := "data.azuredevops_group.group"
@@ -163,7 +164,7 @@ func AccTest_HCL_GroupDataSource_Read_HappyPath(t *testing.T) {
 		Providers: testAccProviders,
 		Steps: []resource.TestStep{
 			{
-				Config: testhelper.AccTest_HCL_GroupDataSource(projectName, group),
+				Config: testhelper.AccTestHCLGroupDataSource(projectName, group),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet(tfBuildDefNode, "name"),
 					resource.TestCheckResourceAttrSet(tfBuildDefNode, "project_id"),
