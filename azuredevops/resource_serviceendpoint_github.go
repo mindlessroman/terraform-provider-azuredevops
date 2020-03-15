@@ -31,7 +31,7 @@ func resourceServiceEndpointGitHub() *schema.Resource {
 	patHashKey, patHashSchema := tfhelper.GenerateSecreteMemoSchema(personalAccessToken)
 	authPersonal.Schema[patHashKey] = patHashSchema
 	r.Schema["auth_personal"] = &schema.Schema{
-		Type:          schema.TypeSet,
+		Type:          schema.TypeList,
 		Optional:      true,
 		MinItems:      1,
 		MaxItems:      1,
@@ -40,7 +40,7 @@ func resourceServiceEndpointGitHub() *schema.Resource {
 	}
 
 	r.Schema["auth_oath"] = &schema.Schema{
-		Type:     schema.TypeSet,
+		Type:     schema.TypeList,
 		Optional: true,
 		MinItems: 1,
 		MaxItems: 1,
@@ -74,8 +74,8 @@ func expandAuthOauthList(d []interface{}) []map[string]string {
 	}
 	return vs
 }
-func expandAuthOauthSet(d *schema.Set) map[string]string {
-	d2 := expandAuthOauthList(d.List())
+func expandAuthOauthSet(authOauth []interface{}) map[string]string {
+	d2 := expandAuthOauthList(authOauth)
 	if len(d2) != 1 {
 		return nil
 	}
@@ -97,8 +97,8 @@ func expandAuthPersonalList(d []interface{}) []map[string]string {
 	}
 	return vs
 }
-func expandAuthPersonalSet(d *schema.Set) map[string]string {
-	d2 := expandAuthPersonalList(d.List())
+func expandAuthPersonalSet(authPersonal []interface{}) map[string]string {
+	d2 := expandAuthPersonalList(authPersonal)
 	if len(d2) != 1 {
 		return nil
 	}
@@ -111,8 +111,8 @@ func expandServiceEndpointGitHub(d *schema.ResourceData) (*serviceendpoint.Servi
 	scheme := "InstallationToken"
 
 	parameters := &map[string]string{}
-	authPersonal := expandAuthPersonalSet(d.Get("auth_personal").(*schema.Set))
-	authGrant := expandAuthOauthSet(d.Get("auth_oath").(*schema.Set))
+	authPersonal := expandAuthPersonalSet(d.Get("auth_personal").([]interface{}))
+	authGrant := expandAuthOauthSet(d.Get("auth_oath").([]interface{}))
 
 	if authPersonal != nil {
 		scheme = "PersonalAccessToken"
@@ -141,7 +141,7 @@ func flattenServiceEndpointGitHub(d *schema.ResourceData, serviceEndpoint *servi
 		return err
 	}
 	if *serviceEndpoint.Authorization.Scheme == "OAuth" {
-		err = d.Set("auth_oath", &[]map[string]interface{}{
+		err = d.Set("auth_oath", []map[string]interface{}{
 			{
 				"oauth_configuration_id": (*serviceEndpoint.Authorization.Parameters)["ConfigurationId"],
 			},
@@ -151,7 +151,7 @@ func flattenServiceEndpointGitHub(d *schema.ResourceData, serviceEndpoint *servi
 		}
 	}
 	if *serviceEndpoint.Authorization.Scheme == "PersonalAccessToken" {
-		authPersonalSet := d.Get("auth_personal").(*schema.Set).List()
+		authPersonalSet := d.Get("auth_personal").([]interface{})
 		if len(authPersonalSet) == 1 {
 			if authPersonal, ok := authPersonalSet[0].(map[string]interface{}); ok {
 				newHash, hashKey := tfhelper.HelpFlattenSecretNested(d, "auth_personal", authPersonal, personalAccessToken)

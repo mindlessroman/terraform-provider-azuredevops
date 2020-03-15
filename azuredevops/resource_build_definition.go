@@ -76,7 +76,7 @@ func resourceBuildDefinition() *schema.Resource {
 				Description: "Agent pool in which to run the definition",
 			},
 			"repository": {
-				Type:        schema.TypeSet,
+				Type:        schema.TypeList,
 				Required:    true,
 				MinItems:    1,
 				MaxItems:    1,
@@ -277,7 +277,7 @@ func flattenRepository(buildDefiniton *build.BuildDefinition) interface{} {
 
 func expandBuildDefinition(d *schema.ResourceData) (*build.BuildDefinition, string, error) {
 	projectID := d.Get("project_id").(string)
-	repositories := d.Get("repository").(*schema.Set).List()
+	repositories := d.Get("repository").([]interface{})
 
 	variableGroupsInterface := d.Get("variable_groups").(*schema.Set).List()
 	variableGroups := make([]build.VariableGroup, len(variableGroupsInterface))

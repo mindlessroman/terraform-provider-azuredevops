@@ -182,8 +182,7 @@ func azDOGraphCreateGroup(ctx context.Context, client graph.Client, args azDOGra
 		err = clientImpl.Client.UnmarshalBody(resp, &responseValue)
 		return &responseValue, err
 	}
-
-	panic("Invalid Azure DevOps Graph client implementation")
+	return nil, fmt.Errorf("Invalid Azure DevOps Graph client implementation")
 }
 
 func resourceGroupCreate(d *schema.ResourceData, meta interface{}) error {

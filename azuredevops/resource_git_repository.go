@@ -86,7 +86,7 @@ func resourceGitRepository() *schema.Resource {
 				Description: "Web link to the repository",
 			},
 			"initialization": {
-				Type:        schema.TypeSet,
+				Type:        schema.TypeList,
 				Optional:    true,
 				MaxItems:    1,
 				Description: "The initialization mode for the repository",
@@ -338,7 +338,7 @@ func expandGitRepository(d *schema.ResourceData) (*git.GitRepository, *repoIniti
 	}
 
 	var initialization *repoInitializationMeta = nil
-	initData := d.Get("initialization").(*schema.Set).List()
+	initData := d.Get("initialization").([]interface{})
 
 	// Note: If configured, this will be of length 1 based on the schema definition above.
 	if len(initData) == 1 {
