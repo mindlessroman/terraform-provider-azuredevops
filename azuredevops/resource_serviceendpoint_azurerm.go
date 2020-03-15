@@ -45,8 +45,11 @@ func expandServiceEndpointAzureRM(d *schema.ResourceData) (*serviceendpoint.Serv
 }
 
 // Convert AzDO data structure to internal Terraform data structure
-func flattenServiceEndpointAzureRM(d *schema.ResourceData, serviceEndpoint *serviceendpoint.ServiceEndpoint, projectID *string) {
-	crud.DoBaseFlattening(d, serviceEndpoint, projectID)
+func flattenServiceEndpointAzureRM(d *schema.ResourceData, serviceEndpoint *serviceendpoint.ServiceEndpoint, projectID *string) error {
+	err := crud.DoBaseFlattening(d, serviceEndpoint, projectID)
+	if err != nil {
+		return err
+	}
 	d.Set("azurerm_scope", (*serviceEndpoint.Authorization.Parameters)["scope"])
 	d.Set("azurerm_spn_clientid", (*serviceEndpoint.Authorization.Parameters)["serviceprincipalid"])
 	tfhelper.HelpFlattenSecret(d, "azurerm_spn_clientsecret")
@@ -54,4 +57,5 @@ func flattenServiceEndpointAzureRM(d *schema.ResourceData, serviceEndpoint *serv
 	d.Set("azurerm_spn_clientsecret", (*serviceEndpoint.Authorization.Parameters)["serviceprincipalkey"])
 	d.Set("azurerm_subscription_id", (*serviceEndpoint.Data)["SubscriptionId"])
 	d.Set("azurerm_subscription_name", (*serviceEndpoint.Data)["SubscriptionName"])
+	return nil
 }

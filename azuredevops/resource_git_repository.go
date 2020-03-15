@@ -226,7 +226,10 @@ func resourceGitRepositoryRead(d *schema.ResourceData, meta interface{}) error {
 		return fmt.Errorf("Error looking up repository with ID %s and Name %s. Error: %v", repoID, repoName, err)
 	}
 
-	flattenGitRepository(d, repo)
+	err = flattenGitRepository(d, repo)
+	if err != nil {
+		return fmt.Errorf("Error flattening git repository. Error: %v", err)
+	}
 	return nil
 }
 
@@ -294,16 +297,16 @@ func gitRepositoryRead(clients *config.AggregatedClient, repoID string, repoName
 	})
 }
 
-func flattenGitRepository(d *schema.ResourceData, repository *git.GitRepository) {
+func flattenGitRepository(d *schema.ResourceData, repository *git.GitRepository) error {
 	d.Set("name", converter.ToString(repository.Name, ""))
 	d.Set("project_id", repository.Project.Id.String())
 	d.Set("default_branch", converter.ToString(repository.DefaultBranch, ""))
 	d.Set("is_fork", repository.IsFork)
 	d.Set("remote_url", converter.ToString(repository.RemoteUrl, ""))
-	d.Set("size", repository.Size)
 	d.Set("ssh_url", converter.ToString(repository.SshUrl, ""))
 	d.Set("url", converter.ToString(repository.Url, ""))
 	d.Set("web_url", converter.ToString(repository.WebUrl, ""))
+	return d.Set("size", repository.Size)
 }
 
 // Convert internal Terraform data structure to an AzDO data structure. Note: only the params that are

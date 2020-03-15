@@ -64,12 +64,16 @@ func expandServiceEndpointDockerHub(d *schema.ResourceData) (*serviceendpoint.Se
 }
 
 // Convert AzDO data structure to internal Terraform data structure
-func flattenServiceEndpointDockerHub(d *schema.ResourceData, serviceEndpoint *serviceendpoint.ServiceEndpoint, projectID *string) {
-	crud.DoBaseFlattening(d, serviceEndpoint, projectID)
+func flattenServiceEndpointDockerHub(d *schema.ResourceData, serviceEndpoint *serviceendpoint.ServiceEndpoint, projectID *string) error {
+	err := crud.DoBaseFlattening(d, serviceEndpoint, projectID)
+	if err != nil {
+		return err
+	}
 	d.Set("docker_email", (*serviceEndpoint.Authorization.Parameters)["email"])
 	d.Set("docker_username", (*serviceEndpoint.Authorization.Parameters)["username"])
 	tfhelper.HelpFlattenSecret(d, "docker_password")
 	d.Set("docker_password", (*serviceEndpoint.Authorization.Parameters)["password"])
+	return nil
 }
 
 // parseImportedProjectIDAndServiceEndpointID : Parse the Id (projectId/serviceEndpointId) or (projectName/serviceEndpointId)

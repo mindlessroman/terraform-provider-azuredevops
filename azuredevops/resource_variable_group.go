@@ -100,7 +100,10 @@ func resourceVariableGroupCreate(d *schema.ResourceData, meta interface{}) error
 		return fmt.Errorf("Error creating variable group in Azure DevOps: %+v", err)
 	}
 
-	flattenVariableGroup(d, addedVariableGroup, projectID)
+	err = flattenVariableGroup(d, addedVariableGroup, projectID)
+	if err != nil {
+		return fmt.Errorf("Error flattening variable group: %+v", err)
+	}
 
 	// Update Allow Access with definition Reference
 	definitionResourceReferenceArgs := expandDefinitionResourceAuth(d, addedVariableGroup)
@@ -133,7 +136,10 @@ func resourceVariableGroupRead(d *schema.ResourceData, meta interface{}) error {
 		return fmt.Errorf("Error looking up variable group given ID (%v) and project ID (%v): %v", variableGroupID, projectID, err)
 	}
 
-	flattenVariableGroup(d, variableGroup, &projectID)
+	err = flattenVariableGroup(d, variableGroup, &projectID)
+	if err != nil {
+		return fmt.Errorf("Error flattening variable group: %+v", err)
+	}
 
 	//Read the Authorization Resource for get allow access property
 	resourceRefType := "variablegroup"
@@ -170,7 +176,10 @@ func resourceVariableGroupUpdate(d *schema.ResourceData, meta interface{}) error
 		return fmt.Errorf("Error updating variable group in Azure DevOps: %+v", err)
 	}
 
-	flattenVariableGroup(d, updatedVariableGroup, projectID)
+	err = flattenVariableGroup(d, updatedVariableGroup, projectID)
+	if err != nil {
+		return fmt.Errorf("Error flattening variable group: %+v", err)
+	}
 
 	// Update Allow Access
 	definitionResourceReferenceArgs := expandDefinitionResourceAuth(d, updatedVariableGroup)
@@ -261,12 +270,12 @@ func expandVariableGroupParameters(d *schema.ResourceData) (*taskagent.VariableG
 }
 
 // Convert AzDO data structure to internal Terraform data structure
-func flattenVariableGroup(d *schema.ResourceData, variableGroup *taskagent.VariableGroup, projectID *string) {
+func flattenVariableGroup(d *schema.ResourceData, variableGroup *taskagent.VariableGroup, projectID *string) error {
 	d.SetId(fmt.Sprintf("%d", *variableGroup.Id))
 	d.Set("name", variableGroup.Name)
 	d.Set("description", variableGroup.Description)
-	d.Set("variable", flattenVariables(variableGroup))
 	d.Set("project_id", projectID)
+	return d.Set("variable", flattenVariables(variableGroup))
 }
 
 // Convert AzDO Variables data structure to Terraform TypeSet

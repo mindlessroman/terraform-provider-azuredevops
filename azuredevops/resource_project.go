@@ -291,13 +291,11 @@ func flattenProject(clients *config.AggregatedClient, d *schema.ResourceData, pr
 
 	d.SetId(project.Id.String())
 	d.Set("project_name", project.Name)
-	d.Set("visibility", project.Visibility)
 	d.Set("description", description)
 	d.Set("version_control", (*project.Capabilities)["versioncontrol"]["sourceControlType"])
 	d.Set("process_template_id", processTemplateID)
 	d.Set("work_item_template", processTemplateName)
-
-	return nil
+	return d.Set("visibility", project.Visibility)
 }
 
 // given a process template name, get the process template ID

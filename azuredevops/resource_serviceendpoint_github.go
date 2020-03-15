@@ -135,24 +135,34 @@ func expandServiceEndpointGitHub(d *schema.ResourceData) (*serviceendpoint.Servi
 }
 
 // Convert AzDO data structure to internal Terraform data structure
-func flattenServiceEndpointGitHub(d *schema.ResourceData, serviceEndpoint *serviceendpoint.ServiceEndpoint, projectID *string) {
-	crud.DoBaseFlattening(d, serviceEndpoint, projectID)
+func flattenServiceEndpointGitHub(d *schema.ResourceData, serviceEndpoint *serviceendpoint.ServiceEndpoint, projectID *string) error {
+	err := crud.DoBaseFlattening(d, serviceEndpoint, projectID)
+	if err != nil {
+		return err
+	}
 	if *serviceEndpoint.Authorization.Scheme == "OAuth" {
-		d.Set("auth_oath", &[]map[string]interface{}{
+		err = d.Set("auth_oath", &[]map[string]interface{}{
 			{
 				"oauth_configuration_id": (*serviceEndpoint.Authorization.Parameters)["ConfigurationId"],
 			},
 		})
+		if err != nil {
+			return err
+		}
 	}
 	if *serviceEndpoint.Authorization.Scheme == "PersonalAccessToken" {
 		authPersonalSet := d.Get("auth_personal").(*schema.Set).List()
 		if len(authPersonalSet) == 1 {
 			if authPersonal, ok := authPersonalSet[0].(map[string]interface{}); ok {
 				newHash, hashKey := tfhelper.HelpFlattenSecretNested(d, "auth_personal", authPersonal, personalAccessToken)
-				d.Set("auth_personal.0", &map[string]interface{}{
+				err = d.Set("auth_personal.0", &map[string]interface{}{
 					hashKey: newHash,
 				})
+				if err != nil {
+					return err
+				}
 			}
 		}
 	}
+	return nil
 }

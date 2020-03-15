@@ -61,7 +61,8 @@ var azurermTestServiceEndpointAzureRM = serviceendpoint.ServiceEndpoint{
 // verifies that the flatten/expand round trip yields the same service endpoint
 func TestAzureDevOpsServiceEndpointAzureRM_ExpandFlatten_Roundtrip(t *testing.T) {
 	resourceData := schema.TestResourceDataRaw(t, resourceServiceEndpointAzureRM().Schema, nil)
-	flattenServiceEndpointAzureRM(resourceData, &azurermTestServiceEndpointAzureRM, azurermTestServiceEndpointAzureRMProjectID)
+	err := flattenServiceEndpointAzureRM(resourceData, &azurermTestServiceEndpointAzureRM, azurermTestServiceEndpointAzureRMProjectID)
+	require.Nil(t, err)
 
 	serviceEndpointAfterRoundTrip, projectID := expandServiceEndpointAzureRM(resourceData)
 
@@ -76,7 +77,8 @@ func TestAzureDevOpsServiceEndpointAzureRM_Create_DoesNotSwallowError(t *testing
 
 	r := resourceServiceEndpointAzureRM()
 	resourceData := schema.TestResourceDataRaw(t, r.Schema, nil)
-	flattenServiceEndpointAzureRM(resourceData, &azurermTestServiceEndpointAzureRM, azurermTestServiceEndpointAzureRMProjectID)
+	err := flattenServiceEndpointAzureRM(resourceData, &azurermTestServiceEndpointAzureRM, azurermTestServiceEndpointAzureRMProjectID)
+	require.Nil(t, err)
 
 	buildClient := azdosdkmocks.NewMockServiceendpointClient(ctrl)
 	clients := &config.AggregatedClient{ServiceEndpointClient: buildClient, Ctx: context.Background()}
@@ -88,7 +90,7 @@ func TestAzureDevOpsServiceEndpointAzureRM_Create_DoesNotSwallowError(t *testing
 		Return(nil, errors.New("CreateServiceEndpoint() Failed")).
 		Times(1)
 
-	err := r.Create(resourceData, clients)
+	err = r.Create(resourceData, clients)
 	require.Contains(t, err.Error(), "CreateServiceEndpoint() Failed")
 }
 
@@ -99,7 +101,8 @@ func TestAzureDevOpsServiceEndpointAzureRM_Read_DoesNotSwallowError(t *testing.T
 
 	r := resourceServiceEndpointAzureRM()
 	resourceData := schema.TestResourceDataRaw(t, r.Schema, nil)
-	flattenServiceEndpointAzureRM(resourceData, &azurermTestServiceEndpointAzureRM, azurermTestServiceEndpointAzureRMProjectID)
+	err := flattenServiceEndpointAzureRM(resourceData, &azurermTestServiceEndpointAzureRM, azurermTestServiceEndpointAzureRMProjectID)
+	require.Nil(t, err)
 
 	buildClient := azdosdkmocks.NewMockServiceendpointClient(ctrl)
 	clients := &config.AggregatedClient{ServiceEndpointClient: buildClient, Ctx: context.Background()}
@@ -111,7 +114,7 @@ func TestAzureDevOpsServiceEndpointAzureRM_Read_DoesNotSwallowError(t *testing.T
 		Return(nil, errors.New("GetServiceEndpoint() Failed")).
 		Times(1)
 
-	err := r.Read(resourceData, clients)
+	err = r.Read(resourceData, clients)
 	require.Contains(t, err.Error(), "GetServiceEndpoint() Failed")
 }
 
@@ -122,7 +125,8 @@ func TestAzureDevOpsServiceEndpointAzureRM_Delete_DoesNotSwallowError(t *testing
 
 	r := resourceServiceEndpointAzureRM()
 	resourceData := schema.TestResourceDataRaw(t, r.Schema, nil)
-	flattenServiceEndpointAzureRM(resourceData, &azurermTestServiceEndpointAzureRM, azurermTestServiceEndpointAzureRMProjectID)
+	err := flattenServiceEndpointAzureRM(resourceData, &azurermTestServiceEndpointAzureRM, azurermTestServiceEndpointAzureRMProjectID)
+	require.Nil(t, err)
 
 	buildClient := azdosdkmocks.NewMockServiceendpointClient(ctrl)
 	clients := &config.AggregatedClient{ServiceEndpointClient: buildClient, Ctx: context.Background()}
@@ -134,7 +138,7 @@ func TestAzureDevOpsServiceEndpointAzureRM_Delete_DoesNotSwallowError(t *testing
 		Return(errors.New("DeleteServiceEndpoint() Failed")).
 		Times(1)
 
-	err := r.Delete(resourceData, clients)
+	err = r.Delete(resourceData, clients)
 	require.Contains(t, err.Error(), "DeleteServiceEndpoint() Failed")
 }
 
@@ -145,7 +149,8 @@ func TestAzureDevOpsServiceEndpointAzureRM_Update_DoesNotSwallowError(t *testing
 
 	r := resourceServiceEndpointAzureRM()
 	resourceData := schema.TestResourceDataRaw(t, r.Schema, nil)
-	flattenServiceEndpointAzureRM(resourceData, &azurermTestServiceEndpointAzureRM, azurermTestServiceEndpointAzureRMProjectID)
+	err := flattenServiceEndpointAzureRM(resourceData, &azurermTestServiceEndpointAzureRM, azurermTestServiceEndpointAzureRMProjectID)
+	require.Nil(t, err)
 
 	buildClient := azdosdkmocks.NewMockServiceendpointClient(ctrl)
 	clients := &config.AggregatedClient{ServiceEndpointClient: buildClient, Ctx: context.Background()}
@@ -162,7 +167,7 @@ func TestAzureDevOpsServiceEndpointAzureRM_Update_DoesNotSwallowError(t *testing
 		Return(nil, errors.New("UpdateServiceEndpoint() Failed")).
 		Times(1)
 
-	err := r.Update(resourceData, clients)
+	err = r.Update(resourceData, clients)
 	require.Contains(t, err.Error(), "UpdateServiceEndpoint() Failed")
 }
 

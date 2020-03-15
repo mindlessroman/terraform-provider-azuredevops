@@ -410,7 +410,10 @@ func flattenGroup(d *schema.ResourceData, group *graph.GraphGroup, members *[]gr
 		for i, e := range *members {
 			dMembers[i] = *e.MemberDescriptor
 		}
-		d.Set("members", dMembers)
+		err := d.Set("members", dMembers)
+		if err != nil {
+			return err
+		}
 	}
 	return nil
 }

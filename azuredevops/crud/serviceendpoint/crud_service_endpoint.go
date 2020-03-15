@@ -1,7 +1,6 @@
 package crudserviceendpoint
 
 import (
-	"errors"
 	"fmt"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
@@ -12,7 +11,7 @@ import (
 	"github.com/microsoft/terraform-provider-azuredevops/azuredevops/utils/validate"
 )
 
-type flatFunc func(d *schema.ResourceData, serviceEndpoint *serviceendpoint.ServiceEndpoint, projectID *string)
+type flatFunc func(d *schema.ResourceData, serviceEndpoint *serviceendpoint.ServiceEndpoint, projectID *string) error
 type expandFunc func(d *schema.ResourceData) (*serviceendpoint.ServiceEndpoint, *string)
 type importFunc func(clients *config.AggregatedClient, id string) (string, string, error)
 
@@ -83,29 +82,18 @@ func DoBaseExpansion(d *schema.ResourceData) (*serviceendpoint.ServiceEndpoint, 
 }
 
 // DoBaseFlattening performs the flattening for the 'base' attributes that are defined in the schema, above
-func DoBaseFlattening(d *schema.ResourceData, serviceEndpoint *serviceendpoint.ServiceEndpoint, projectID *string) {
+func DoBaseFlattening(d *schema.ResourceData, serviceEndpoint *serviceendpoint.ServiceEndpoint, projectID *string) error {
 	d.SetId(serviceEndpoint.Id.String())
 	d.Set("service_endpoint_name", serviceEndpoint.Name)
 	d.Set("project_id", projectID)
 	d.Set("description", serviceEndpoint.Description)
-	d.Set("authorization", &[]map[string]interface{}{
-		{
-			"scheme": *serviceEndpoint.Authorization.Scheme,
-		},
-	})
+	d.Set("authorization_scheme", serviceEndpoint.Authorization.Scheme)
+	return nil
 }
 
-// GetScheme allows you to get the nested scheme value
+// GetScheme allows you to get the scheme value
 func GetScheme(d *schema.ResourceData) (string, error) {
-	authorization := d.Get("authorization").(*schema.Set)
-	if authorization == nil {
-		return "", errors.New("authorization not set")
-	}
-	authorizationList := authorization.List()
-	if len(authorizationList) != 1 {
-		return "", errors.New("authorization is invalid")
-	}
-	scheme := authorizationList[0].(map[string]interface{})["scheme"].(string)
+	scheme := d.Get("authorization_scheme").(string)
 	return scheme, nil
 }
 
@@ -185,7 +173,10 @@ func genServiceEndpointCreateFunc(flatFunc flatFunc, expandFunc expandFunc) func
 			return fmt.Errorf("Error creating service endpoint in Azure DevOps: %+v", err)
 		}
 
-		flatFunc(d, createdServiceEndpoint, projectID)
+		err = flatFunc(d, createdServiceEndpoint, projectID)
+		if err != nil {
+			return fmt.Errorf("Error flattening service ednpoint: %+v", err)
+		}
 		return nil
 	}
 }
@@ -213,7 +204,10 @@ func genServiceEndpointReadFunc(flatFunc flatFunc) func(d *schema.ResourceData, 
 			return fmt.Errorf("Error looking up service endpoint given ID (%v) and project ID (%v): %v", serviceEndpointID, projectID, err)
 		}
 
-		flatFunc(d, serviceEndpoint, projectID)
+		err = flatFunc(d, serviceEndpoint, projectID)
+		if err != nil {
+			return fmt.Errorf("Error flattening service ednpoint: %+v", err)
+		}
 		return nil
 	}
 }
@@ -228,7 +222,10 @@ func genServiceEndpointUpdateFunc(flatFunc flatFunc, expandFunc expandFunc) sche
 			return fmt.Errorf("Error updating service endpoint in Azure DevOps: %+v", err)
 		}
 
-		flatFunc(d, updatedServiceEndpoint, projectID)
+		err = flatFunc(d, updatedServiceEndpoint, projectID)
+		if err != nil {
+			return fmt.Errorf("Error flattening service ednpoint: %+v", err)
+		}
 		return nil
 	}
 }

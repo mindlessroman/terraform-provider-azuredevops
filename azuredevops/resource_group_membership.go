@@ -281,7 +281,10 @@ func resourceGroupMembershipRead(d *schema.ResourceData, meta interface{}) error
 		}
 	}
 
-	d.Set("members", members)
+	err = d.Set("members", members)
+	if err != nil {
+		return fmt.Errorf("Error flattening group membership: %+v", err)
+	}
 	return nil
 }
 

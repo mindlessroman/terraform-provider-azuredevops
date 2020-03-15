@@ -129,20 +129,19 @@ func resourceBuildDefinitionCreate(d *schema.ResourceData, meta interface{}) err
 		return fmt.Errorf("Error creating resource Build Definition: %+v", err)
 	}
 
-	flattenBuildDefinition(d, createdBuildDefinition, projectID)
+	err = flattenBuildDefinition(d, createdBuildDefinition, projectID)
+	if err != nil {
+		return fmt.Errorf("Error flattening Build Definition: %+v", err)
+	}
 	return resourceBuildDefinitionRead(d, meta)
 }
 
-func flattenBuildDefinition(d *schema.ResourceData, buildDefinition *build.BuildDefinition, projectID string) {
+func flattenBuildDefinition(d *schema.ResourceData, buildDefinition *build.BuildDefinition, projectID string) error {
 	d.SetId(strconv.Itoa(*buildDefinition.Id))
-
 	d.Set("project_id", projectID)
 	d.Set("name", buildDefinition.Name)
 	d.Set("path", buildDefinition.Path)
-	d.Set("repository", flattenRepository(buildDefinition))
 	d.Set("agent_pool_name", buildDefinition.Queue.Pool.Name)
-
-	d.Set("variable_groups", flattenVariableGroups(buildDefinition))
 
 	revision := 0
 	if buildDefinition.Revision != nil {
@@ -150,6 +149,16 @@ func flattenBuildDefinition(d *schema.ResourceData, buildDefinition *build.Build
 	}
 
 	d.Set("revision", revision)
+
+	err := d.Set("repository", flattenRepository(buildDefinition))
+	if err != nil {
+		return err
+	}
+	err = d.Set("variable_groups", flattenVariableGroups(buildDefinition))
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func flattenVariableGroups(buildDefinition *build.BuildDefinition) []int {
@@ -192,7 +201,10 @@ func resourceBuildDefinitionRead(d *schema.ResourceData, meta interface{}) error
 		return err
 	}
 
-	flattenBuildDefinition(d, buildDefinition, projectID)
+	err = flattenBuildDefinition(d, buildDefinition, projectID)
+	if err != nil {
+		return fmt.Errorf("Error flattening Build Definition: %+v", err)
+	}
 	return nil
 }
 
@@ -232,7 +244,10 @@ func resourceBuildDefinitionUpdate(d *schema.ResourceData, meta interface{}) err
 		return err
 	}
 
-	flattenBuildDefinition(d, updatedBuildDefinition, projectID)
+	err = flattenBuildDefinition(d, updatedBuildDefinition, projectID)
+	if err != nil {
+		return fmt.Errorf("Error flattening Build Definition: %+v", err)
+	}
 	return nil
 }
 

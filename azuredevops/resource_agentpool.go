@@ -59,7 +59,10 @@ func resourceAzureAgentPoolCreate(d *schema.ResourceData, meta interface{}) erro
 		return fmt.Errorf("Error creating agent pool in Azure DevOps: %+v", err)
 	}
 
-	flattenAzureAgentPool(d, createdAgentPool)
+	err = flattenAzureAgentPool(d, createdAgentPool)
+	if err != nil {
+		return fmt.Errorf("Error flattening agent pool: %+v", err)
+	}
 
 	return resourceAzureAgentPoolRead(d, meta)
 }
@@ -76,7 +79,10 @@ func resourceAzureAgentPoolRead(d *schema.ResourceData, meta interface{}) error 
 		return fmt.Errorf("Error looking up agent pool with ID %d. Error: %v", poolID, err)
 	}
 
-	flattenAzureAgentPool(d, agentPool)
+	err = flattenAzureAgentPool(d, agentPool)
+	if err != nil {
+		return fmt.Errorf("Error flattening agent pool: %+v", err)
+	}
 	return nil
 }
 
@@ -135,11 +141,12 @@ func azureAgentPoolUpdate(clients *config.AggregatedClient, agentPool *taskagent
 		})
 }
 
-func flattenAzureAgentPool(d *schema.ResourceData, agentPool *taskagent.TaskAgentPool) {
+func flattenAzureAgentPool(d *schema.ResourceData, agentPool *taskagent.TaskAgentPool) error {
 	d.SetId(strconv.Itoa(*agentPool.Id))
 	d.Set("name", converter.ToString(agentPool.Name, ""))
-	d.Set("pool_type", agentPool.PoolType)
 	d.Set("auto_provision", agentPool.AutoProvision)
+	err := d.Set("pool_type", agentPool.PoolType)
+	return err
 }
 
 func expandAgentPool(d *schema.ResourceData, forCreate bool) (*taskagent.TaskAgentPool, error) {
