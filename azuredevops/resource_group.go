@@ -35,6 +35,7 @@ func resourceGroup() *schema.Resource {
 				ValidateFunc: validation.NoZeroValues,
 				Optional:     true,
 				ForceNew:     true,
+				Description:  "A descriptor referencing the scope (collection, project) in which the group should be created",
 			},
 
 			// ***
@@ -52,6 +53,7 @@ func resourceGroup() *schema.Resource {
 				Computed:      true,
 				ForceNew:      true,
 				ConflictsWith: []string{"mail", "display_name", "scope"},
+				Description:   "The OriginID as a reference to a group from an external AD or AAD backed provider",
 			},
 
 			"mail": {
@@ -61,6 +63,7 @@ func resourceGroup() *schema.Resource {
 				ForceNew:      true,
 				Computed:      true,
 				ConflictsWith: []string{"origin_id", "display_name", "scope"},
+				Description:   "The mail address as a reference to an existing group from an external AD or AAD backed provider",
 			},
 
 			"display_name": {
@@ -70,41 +73,49 @@ func resourceGroup() *schema.Resource {
 				ForceNew:      true,
 				Computed:      true,
 				ConflictsWith: []string{"origin_id", "mail"},
+				Description:   "The name of a new Azure DevOps group that is not backed by an external provider",
 			},
 
 			"description": {
-				Type:     schema.TypeString,
-				Optional: true,
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "The Description of the Group",
 			},
 
 			"url": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The full route to the source resource of this graph subject",
 			},
 
 			"origin": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The type of source provider for the origin identifier (ex:AD, AAD, MSA)",
 			},
 
 			"subject_kind": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "This field identifies the type of the graph subject (ex: Group, Scope, User)",
 			},
 
 			"domain": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "This represents the name of the container of origin for a graph member",
 			},
 
 			"principal_name": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "This is the PrincipalName of this graph member from the source provider",
 			},
 
 			"descriptor": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The identity (subject) descriptor of the Group",
 			},
 
 			"members": {
@@ -113,10 +124,11 @@ func resourceGroup() *schema.Resource {
 					Type:         schema.TypeString,
 					ValidateFunc: validation.NoZeroValues,
 				},
-				Computed:   true,
-				Optional:   true,
-				ConfigMode: schema.SchemaConfigModeAttr,
-				Set:        schema.HashString,
+				Computed:    true,
+				Optional:    true,
+				ConfigMode:  schema.SchemaConfigModeAttr,
+				Set:         schema.HashString,
+				Description: "The members to add to the group",
 			},
 		},
 	}

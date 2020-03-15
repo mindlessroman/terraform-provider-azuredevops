@@ -22,14 +22,16 @@ func resourceUserEntitlement() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"principal_name": {
-				Type:     schema.TypeString,
-				Optional: true,
-				ForceNew: true,
+				Type:        schema.TypeString,
+				Optional:    true,
+				ForceNew:    true,
+				Description: "Principa lName of a graph member from the source provider. Usually, e-mail address",
 			},
 			"origin_id": {
-				Type:     schema.TypeString,
-				Optional: true,
-				ForceNew: true,
+				Type:        schema.TypeString,
+				Optional:    true,
+				ForceNew:    true,
+				Description: "The unique identifier from the system of origin. Typically a sid, object id or Guid. e.g. Used for member of other tenant on Azure Active Directory",
 			},
 			"origin": {
 				Type:         schema.TypeString,
@@ -37,6 +39,7 @@ func resourceUserEntitlement() *schema.Resource {
 				ForceNew:     true,
 				Default:      "aad",
 				ValidateFunc: validation.StringInSlice([]string{"aad", "ghb"}, false),
+				Description:  "The type of source provider for the origin identifier",
 			},
 			"account_license_type": {
 				Type:         schema.TypeString,
@@ -44,10 +47,12 @@ func resourceUserEntitlement() *schema.Resource {
 				ForceNew:     true,
 				Default:      "express",
 				ValidateFunc: validation.StringInSlice([]string{"advanced", "earlyAdopter", "express", "none", "professional", "stakeholder"}, false),
+				Description:  "Type of Account License",
 			},
 			"descriptor": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "This field will uniqely identify the user graph subject",
 			},
 		},
 	}

@@ -47,8 +47,9 @@ func resourceServiceEndpointGitHub() *schema.Resource {
 		Elem: &schema.Resource{
 			Schema: map[string]*schema.Schema{
 				"oauth_configuration_id": {
-					Type:     schema.TypeString,
-					Required: true,
+					Type:        schema.TypeString,
+					Required:    true,
+					Description: "Configuration ID for OAuth",
 				},
 			},
 		},

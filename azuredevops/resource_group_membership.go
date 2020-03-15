@@ -27,6 +27,7 @@ func resourceGroupMembership() *schema.Resource {
 				Required:     true,
 				ForceNew:     true,
 				ValidateFunc: validation.NoZeroValues,
+				Description:  "The descriptor of the group being managed",
 			},
 			"mode": {
 				Type:     schema.TypeString,
@@ -35,6 +36,7 @@ func resourceGroupMembership() *schema.Resource {
 				ValidateFunc: validation.StringInSlice([]string{
 					"add", "overwrite",
 				}, true),
+				Description: "Determines how this resource will manage group members. See the docs for more info",
 			},
 			"members": {
 				Type:     schema.TypeSet,
@@ -43,6 +45,7 @@ func resourceGroupMembership() *schema.Resource {
 					Type:         schema.TypeString,
 					ValidateFunc: validation.NoZeroValues,
 				},
+				Description: "The members of the group. The semantics of this depend on the chosen mode. See docs for more info",
 			},
 		},
 	}

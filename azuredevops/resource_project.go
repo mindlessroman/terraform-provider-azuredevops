@@ -39,17 +39,20 @@ func resourceProject() *schema.Resource {
 				Required:         true,
 				ValidateFunc:     validate.NoEmptyStrings,
 				DiffSuppressFunc: suppress.CaseDifference,
+				Description:      "The name of the project",
 			},
 			"description": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Default:  "",
+				Type:        schema.TypeString,
+				Optional:    true,
+				Default:     "",
+				Description: "A description of the project",
 			},
 			"visibility": {
 				Type:         schema.TypeString,
 				Optional:     true,
 				Default:      "private",
 				ValidateFunc: validation.StringInSlice([]string{"private", "public"}, false),
+				Description:  " The visibility of the project for people not in the Azure DevOps organization",
 			},
 			"version_control": {
 				Type:         schema.TypeString,
@@ -57,6 +60,7 @@ func resourceProject() *schema.Resource {
 				Optional:     true,
 				Default:      "Git",
 				ValidateFunc: validation.StringInSlice([]string{"Git", "Tfvc"}, true),
+				Description:  "The type of version control to use for the project",
 			},
 			"work_item_template": {
 				Type:             schema.TypeString,
@@ -65,11 +69,13 @@ func resourceProject() *schema.Resource {
 				ValidateFunc:     validate.NoEmptyStrings,
 				DiffSuppressFunc: suppress.CaseDifference,
 				Default:          "Agile",
+				Description:      "The template to use for work items on boards and backlog",
 			},
 			"process_template_id": {
-				Type:     schema.TypeString,
-				ForceNew: true,
-				Computed: true,
+				Type:        schema.TypeString,
+				ForceNew:    true,
+				Computed:    true,
+				Description: "The ID of the work item template chosen",
 			},
 		},
 	}

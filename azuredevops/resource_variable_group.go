@@ -36,44 +36,52 @@ func resourceVariableGroup() *schema.Resource {
 				Required:     true,
 				ForceNew:     true,
 				ValidateFunc: validate.UUID,
+				Description:  "The ID of the project in which the variable group will be created",
 			},
 			"name": {
 				Type:         schema.TypeString,
 				Required:     true,
 				ValidateFunc: validate.NoEmptyStrings,
+				Description:  "The name of the variable grouop",
 			},
 			"description": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Default:  "",
+				Type:        schema.TypeString,
+				Optional:    true,
+				Default:     "",
+				Description: "A descripton of the variable group",
 			},
 			"allow_access": {
-				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  false,
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Default:     false,
+				Description: "True if all pipelines should have access to this group",
 			},
 			"variable": {
 				Type: schema.TypeSet,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"name": {
-							Type:     schema.TypeString,
-							Required: true,
+							Type:        schema.TypeString,
+							Required:    true,
+							Description: "The name of the variable",
 						},
 						"value": {
-							Type:     schema.TypeString,
-							Optional: true,
-							Default:  "",
+							Type:        schema.TypeString,
+							Optional:    true,
+							Default:     "",
+							Description: "The value of the variable",
 						},
 						"is_secret": {
-							Type:     schema.TypeBool,
-							Optional: true,
-							Default:  false,
+							Type:        schema.TypeBool,
+							Optional:    true,
+							Default:     false,
+							Description: "True if the variable is a secret. This will mask the output in Azure DevOps",
 						},
 					},
 				},
-				Required: true,
-				MinItems: 1,
+				Description: "The variables in the group",
+				Required:    true,
+				MinItems:    1,
 				Set: func(i interface{}) int {
 					item := i.(map[string]interface{})
 					return schema.HashString(item["name"].(string))
