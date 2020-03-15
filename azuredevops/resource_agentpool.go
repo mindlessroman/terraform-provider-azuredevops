@@ -9,6 +9,7 @@ import (
 	"github.com/microsoft/azure-devops-go-api/azuredevops/taskagent"
 	"github.com/microsoft/terraform-provider-azuredevops/azuredevops/utils/config"
 	"github.com/microsoft/terraform-provider-azuredevops/azuredevops/utils/converter"
+	"github.com/microsoft/terraform-provider-azuredevops/azuredevops/utils/tfhelper"
 	"github.com/microsoft/terraform-provider-azuredevops/azuredevops/utils/validate"
 )
 
@@ -44,6 +45,7 @@ func resourceAzureAgentPool() *schema.Resource {
 				Description: "Specifies whether or not a queue should be automatically provisioned for each project collection",
 			},
 		},
+		Timeouts: tfhelper.DefaultTimeout,
 	}
 }
 

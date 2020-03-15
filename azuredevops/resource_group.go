@@ -18,6 +18,7 @@ import (
 	"github.com/microsoft/azure-devops-go-api/azuredevops/webapi"
 	"github.com/microsoft/terraform-provider-azuredevops/azuredevops/utils/config"
 	"github.com/microsoft/terraform-provider-azuredevops/azuredevops/utils/converter"
+	"github.com/microsoft/terraform-provider-azuredevops/azuredevops/utils/tfhelper"
 )
 
 func resourceGroup() *schema.Resource {
@@ -29,6 +30,7 @@ func resourceGroup() *schema.Resource {
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},
+		Timeouts: tfhelper.DefaultTimeout,
 		Schema: map[string]*schema.Schema{
 			"scope": {
 				Type:         schema.TypeString,

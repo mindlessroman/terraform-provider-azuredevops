@@ -12,13 +12,15 @@ import (
 	"github.com/microsoft/azure-devops-go-api/azuredevops/memberentitlementmanagement"
 	"github.com/microsoft/terraform-provider-azuredevops/azuredevops/utils/config"
 	"github.com/microsoft/terraform-provider-azuredevops/azuredevops/utils/converter"
+	"github.com/microsoft/terraform-provider-azuredevops/azuredevops/utils/tfhelper"
 )
 
 func resourceUserEntitlement() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceUserEntitlementCreate,
-		Read:   resourceUserEntitlementRead,
-		Delete: resourceUserEntitlementDelete,
+		Create:   resourceUserEntitlementCreate,
+		Read:     resourceUserEntitlementRead,
+		Delete:   resourceUserEntitlementDelete,
+		Timeouts: tfhelper.DefaultTimeout,
 
 		Schema: map[string]*schema.Schema{
 			"principal_name": {

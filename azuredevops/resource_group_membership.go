@@ -7,6 +7,7 @@ import (
 
 	"github.com/microsoft/terraform-provider-azuredevops/azuredevops/utils/config"
 	"github.com/microsoft/terraform-provider-azuredevops/azuredevops/utils/converter"
+	"github.com/microsoft/terraform-provider-azuredevops/azuredevops/utils/tfhelper"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
@@ -16,10 +17,11 @@ import (
 
 func resourceGroupMembership() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceGroupMembershipCreate,
-		Read:   resourceGroupMembershipRead,
-		Update: resourceGroupMembershipUpdate,
-		Delete: resourceGroupMembershipDelete,
+		Create:   resourceGroupMembershipCreate,
+		Read:     resourceGroupMembershipRead,
+		Update:   resourceGroupMembershipUpdate,
+		Delete:   resourceGroupMembershipDelete,
+		Timeouts: tfhelper.DefaultTimeout,
 
 		Schema: map[string]*schema.Schema{
 			"group": {

@@ -9,6 +9,7 @@ import (
 	"log"
 	"strconv"
 	"strings"
+	"time"
 )
 
 func calcSecretHashKey(secretKey string) string {
@@ -139,3 +140,24 @@ func ParseImportedUUID(id string) (string, string, error) {
 	}
 	return project, parts[1], nil
 }
+
+// GenerateTimeout generates a resource timeout configuration. Any positive values will be configured as timeouts
+func GenerateTimeout(createTimeoutMin, readTimeoutMin, updateTimeoutMin, deleteTimeoutMin time.Duration) *schema.ResourceTimeout {
+	timeout := &schema.ResourceTimeout{}
+	if createTimeoutMin > 0 {
+		timeout.Create = schema.DefaultTimeout(createTimeoutMin * time.Minute)
+	}
+	if readTimeoutMin > 0 {
+		timeout.Read = schema.DefaultTimeout(readTimeoutMin * time.Minute)
+	}
+	if updateTimeoutMin > 0 {
+		timeout.Update = schema.DefaultTimeout(updateTimeoutMin * time.Minute)
+	}
+	if deleteTimeoutMin > 0 {
+		timeout.Delete = schema.DefaultTimeout(deleteTimeoutMin * time.Minute)
+	}
+	return timeout
+}
+
+// DefaultTimeout A reasonable timeout for most resources
+var DefaultTimeout = GenerateTimeout(2, 1, 1, 1)

@@ -12,15 +12,17 @@ import (
 	"github.com/microsoft/terraform-provider-azuredevops/azuredevops/utils/config"
 	"github.com/microsoft/terraform-provider-azuredevops/azuredevops/utils/converter"
 	"github.com/microsoft/terraform-provider-azuredevops/azuredevops/utils/suppress"
+	"github.com/microsoft/terraform-provider-azuredevops/azuredevops/utils/tfhelper"
 	"github.com/microsoft/terraform-provider-azuredevops/azuredevops/utils/validate"
 )
 
 func resourceGitRepository() *schema.Resource {
 	return &schema.Resource{
-		Create: resourceGitRepositoryCreate,
-		Read:   resourceGitRepositoryRead,
-		Update: resourceGitRepositoryUpdate,
-		Delete: resourceGitRepositoryDelete,
+		Create:   resourceGitRepositoryCreate,
+		Read:     resourceGitRepositoryRead,
+		Update:   resourceGitRepositoryUpdate,
+		Delete:   resourceGitRepositoryDelete,
+		Timeouts: tfhelper.DefaultTimeout,
 
 		Schema: map[string]*schema.Schema{
 			"project_id": {

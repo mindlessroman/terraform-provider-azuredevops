@@ -33,6 +33,7 @@ func resourceProject() *schema.Resource {
 		Importer: &schema.ResourceImporter{
 			State: schema.ImportStatePassthrough,
 		},
+		Timeouts: tfhelper.GenerateTimeout(5, 1, 1, 5),
 		Schema: map[string]*schema.Schema{
 			"project_name": {
 				Type:             schema.TypeString,

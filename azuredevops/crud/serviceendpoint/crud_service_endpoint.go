@@ -35,7 +35,8 @@ func GenBaseServiceEndpointResource(f flatFunc, e expandFunc, i importFunc) *sch
 				return []*schema.ResourceData{d}, nil
 			},
 		},
-		Schema: genBaseSchema(),
+		Schema:   genBaseSchema(),
+		Timeouts: tfhelper.DefaultTimeout,
 	}
 }
 

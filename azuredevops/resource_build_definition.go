@@ -33,6 +33,7 @@ func resourceBuildDefinition() *schema.Resource {
 				return []*schema.ResourceData{d}, nil
 			},
 		},
+		Timeouts: tfhelper.DefaultTimeout,
 		Schema: map[string]*schema.Schema{
 			"project_id": {
 				Type:        schema.TypeString,
