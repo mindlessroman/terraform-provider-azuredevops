@@ -224,12 +224,12 @@ func TestAccAzureDevOpsBuildDefinition_CreateAndUpdate(t *testing.T) {
 
 	tfBuildDefNode := "azuredevops_build_definition.build"
 	resource.Test(t, resource.TestCase{
-		PreCheck:     func() { testhelper.TestAccPreCheck(t, nil) },
+		PreCheck:     func() { testhelper.AccTestPreCheck(t, nil) },
 		Providers:    testAccProviders,
 		CheckDestroy: testAccBuildDefinitionCheckDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testhelper.TestAccBuildDefinitionResource(projectName, buildDefinitionNameFirst, buildDefinitionPathEmpty),
+				Config: testhelper.AccTest_HCL_BuildDefinitionResource(projectName, buildDefinitionNameFirst, buildDefinitionPathEmpty),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet(tfBuildDefNode, "project_id"),
 					resource.TestCheckResourceAttrSet(tfBuildDefNode, "revision"),
@@ -238,7 +238,7 @@ func TestAccAzureDevOpsBuildDefinition_CreateAndUpdate(t *testing.T) {
 					testAccCheckBuildDefinitionResourceExists(buildDefinitionNameFirst),
 				),
 			}, {
-				Config: testhelper.TestAccBuildDefinitionResource(projectName, buildDefinitionNameSecond, buildDefinitionPathEmpty),
+				Config: testhelper.AccTest_HCL_BuildDefinitionResource(projectName, buildDefinitionNameSecond, buildDefinitionPathEmpty),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet(tfBuildDefNode, "project_id"),
 					resource.TestCheckResourceAttrSet(tfBuildDefNode, "revision"),
@@ -247,7 +247,7 @@ func TestAccAzureDevOpsBuildDefinition_CreateAndUpdate(t *testing.T) {
 					testAccCheckBuildDefinitionResourceExists(buildDefinitionNameSecond),
 				),
 			}, {
-				Config: testhelper.TestAccBuildDefinitionResource(projectName, buildDefinitionNameFirst, buildDefinitionPathFirst),
+				Config: testhelper.AccTest_HCL_BuildDefinitionResource(projectName, buildDefinitionNameFirst, buildDefinitionPathFirst),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet(tfBuildDefNode, "project_id"),
 					resource.TestCheckResourceAttrSet(tfBuildDefNode, "revision"),
@@ -256,7 +256,7 @@ func TestAccAzureDevOpsBuildDefinition_CreateAndUpdate(t *testing.T) {
 					testAccCheckBuildDefinitionResourceExists(buildDefinitionNameFirst),
 				),
 			}, {
-				Config: testhelper.TestAccBuildDefinitionResource(projectName, buildDefinitionNameFirst,
+				Config: testhelper.AccTest_HCL_BuildDefinitionResource(projectName, buildDefinitionNameFirst,
 					buildDefinitionPathSecond),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet(tfBuildDefNode, "project_id"),
@@ -266,7 +266,7 @@ func TestAccAzureDevOpsBuildDefinition_CreateAndUpdate(t *testing.T) {
 					testAccCheckBuildDefinitionResourceExists(buildDefinitionNameFirst),
 				),
 			}, {
-				Config: testhelper.TestAccBuildDefinitionResource(projectName, buildDefinitionNameFirst, buildDefinitionPathThird),
+				Config: testhelper.AccTest_HCL_BuildDefinitionResource(projectName, buildDefinitionNameFirst, buildDefinitionPathThird),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet(tfBuildDefNode, "project_id"),
 					resource.TestCheckResourceAttrSet(tfBuildDefNode, "revision"),
@@ -275,7 +275,7 @@ func TestAccAzureDevOpsBuildDefinition_CreateAndUpdate(t *testing.T) {
 					testAccCheckBuildDefinitionResourceExists(buildDefinitionNameFirst),
 				),
 			}, {
-				Config: testhelper.TestAccBuildDefinitionResource(projectName, buildDefinitionNameFirst, buildDefinitionPathFourth),
+				Config: testhelper.AccTest_HCL_BuildDefinitionResource(projectName, buildDefinitionNameFirst, buildDefinitionPathFourth),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet(tfBuildDefNode, "project_id"),
 					resource.TestCheckResourceAttrSet(tfBuildDefNode, "revision"),

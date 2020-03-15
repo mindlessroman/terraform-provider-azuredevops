@@ -27,6 +27,7 @@ func dataProjects() *schema.Resource {
 				Optional:         true,
 				ValidateFunc:     validate.NoEmptyStrings,
 				DiffSuppressFunc: suppress.CaseDifference,
+				Description:      "Enables filtering based on project name",
 			},
 			"state": {
 				Type:     schema.TypeString,
@@ -42,29 +43,35 @@ func dataProjects() *schema.Resource {
 					string(core.ProjectStateValues.Unchanged),
 					string(core.ProjectStateValues.Deleted),
 				}, true),
+				Description: "Enables filtering based on project state",
 			},
 
 			"projects": {
-				Type:     schema.TypeSet,
-				Computed: true,
-				Set:      getProjectHash,
+				Type:        schema.TypeSet,
+				Computed:    true,
+				Set:         getProjectHash,
+				Description: "The projects found after applying all filters",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"name": {
-							Type:     schema.TypeString,
-							Computed: true,
+							Type:        schema.TypeString,
+							Computed:    true,
+							Description: "The name of the project",
 						},
 						"project_id": {
-							Type:     schema.TypeString,
-							Computed: true,
+							Type:        schema.TypeString,
+							Computed:    true,
+							Description: "The ID of the project",
 						},
 						"project_url": {
-							Type:     schema.TypeString,
-							Computed: true,
+							Type:        schema.TypeString,
+							Computed:    true,
+							Description: "The URL to the full project object",
 						},
 						"state": {
-							Type:     schema.TypeString,
-							Computed: true,
+							Type:        schema.TypeString,
+							Computed:    true,
+							Description: "The state of the project",
 						},
 					},
 				},

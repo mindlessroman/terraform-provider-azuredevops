@@ -179,12 +179,12 @@ func TestAccAzureDevOpsServiceEndpointAzureRm_CreateAndUpdate(t *testing.T) {
 
 	tfSvcEpNode := "azuredevops_serviceendpoint_azurerm.serviceendpointrm"
 	resource.Test(t, resource.TestCase{
-		PreCheck:     func() { testhelper.TestAccPreCheck(t, nil) },
+		PreCheck:     func() { testhelper.AccTestPreCheck(t, nil) },
 		Providers:    testAccProviders,
 		CheckDestroy: testAccServiceEndpointAzureRMCheckDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testhelper.TestAccServiceEndpointAzureRMResource(projectName, serviceEndpointNameFirst),
+				Config: testhelper.AccTest_HCL_ServiceEndpointAzureRMResource(projectName, serviceEndpointNameFirst),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet(tfSvcEpNode, "project_id"),
 					resource.TestCheckResourceAttrSet(tfSvcEpNode, "azurerm_spn_clientid"),
@@ -198,7 +198,7 @@ func TestAccAzureDevOpsServiceEndpointAzureRm_CreateAndUpdate(t *testing.T) {
 					testAccCheckServiceEndpointAzureRMResourceExists(serviceEndpointNameFirst),
 				),
 			}, {
-				Config: testhelper.TestAccServiceEndpointAzureRMResource(projectName, serviceEndpointNameSecond),
+				Config: testhelper.AccTest_HCL_ServiceEndpointAzureRMResource(projectName, serviceEndpointNameSecond),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet(tfSvcEpNode, "project_id"),
 					resource.TestCheckResourceAttrSet(tfSvcEpNode, "azurerm_spn_clientid"),

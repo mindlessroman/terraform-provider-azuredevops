@@ -43,19 +43,22 @@ func GenBaseServiceEndpointResource(f flatFunc, e expandFunc, i importFunc) *sch
 func genBaseSchema() map[string]*schema.Schema {
 	return map[string]*schema.Schema{
 		"project_id": {
-			Type:     schema.TypeString,
-			Required: true,
-			ForceNew: true,
+			Type:        schema.TypeString,
+			Required:    true,
+			ForceNew:    true,
+			Description: "The ID of the project in which to create the endpoint",
 		},
 		"service_endpoint_name": {
 			Type:         schema.TypeString,
 			Required:     true,
 			ValidateFunc: validate.NoEmptyStrings,
+			Description:  "The name of the service endpoint",
 		},
 		"description": {
-			Type:     schema.TypeString,
-			Optional: true,
-			Default:  "Managed by Terraform",
+			Type:        schema.TypeString,
+			Optional:    true,
+			Default:     "Managed by Terraform",
+			Description: "The description of the endpoint",
 		},
 	}
 }

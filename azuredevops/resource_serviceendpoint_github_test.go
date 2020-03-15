@@ -170,12 +170,12 @@ func TestAccAzureDevOpsServiceEndpointGitHub_CreateAndUpdate(t *testing.T) {
 
 	tfSvcEpNode := "azuredevops_serviceendpoint_github.serviceendpoint"
 	resource.Test(t, resource.TestCase{
-		PreCheck:     func() { testhelper.TestAccPreCheck(t, &[]string{"AZDO_GITHUB_SERVICE_CONNECTION_PAT"}) },
+		PreCheck:     func() { testhelper.AccTestPreCheck(t, &[]string{"AZDO_GITHUB_SERVICE_CONNECTION_PAT"}) },
 		Providers:    testAccProviders,
 		CheckDestroy: testAccServiceEndpointGitHubCheckDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testhelper.TestAccServiceEndpointGitHubResource(projectName, serviceEndpointNameFirst),
+				Config: testhelper.AccTest_HCL_ServiceEndpointGitHubResource(projectName, serviceEndpointNameFirst),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet(tfSvcEpNode, "project_id"),
 					resource.TestCheckResourceAttr(tfSvcEpNode, "auth_personal.#", "1"),
@@ -184,7 +184,7 @@ func TestAccAzureDevOpsServiceEndpointGitHub_CreateAndUpdate(t *testing.T) {
 					testAccCheckServiceEndpointGitHubResourceExists(serviceEndpointNameFirst),
 				),
 			}, {
-				Config: testhelper.TestAccServiceEndpointGitHubResource(projectName, serviceEndpointNameSecond),
+				Config: testhelper.AccTest_HCL_ServiceEndpointGitHubResource(projectName, serviceEndpointNameSecond),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet(tfSvcEpNode, "project_id"),
 					resource.TestCheckResourceAttr(tfSvcEpNode, "auth_personal.#", "1"),

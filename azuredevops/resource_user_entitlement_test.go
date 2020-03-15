@@ -207,12 +207,12 @@ func TestAccAzureDevOpsUserEntitlement_Create(t *testing.T) {
 	tfNode := "azuredevops_user_entitlement.user"
 	principalName := os.Getenv("AZDO_TEST_AAD_USER_EMAIL")
 	resource.Test(t, resource.TestCase{
-		PreCheck:     func() { testhelper.TestAccPreCheck(t, &[]string{"AZDO_TEST_AAD_USER_EMAIL"}) },
+		PreCheck:     func() { testhelper.AccTestPreCheck(t, &[]string{"AZDO_TEST_AAD_USER_EMAIL"}) },
 		Providers:    testAccProviders,
 		CheckDestroy: testAccUserEntitlementCheckDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testhelper.TestAccUserEntitlementResource(principalName),
+				Config: testhelper.AccTest_HCL_UserEntitlementResource(principalName),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet(tfNode, "descriptor"),
 					testAccCheckUserEntitlementResourceExists(principalName),

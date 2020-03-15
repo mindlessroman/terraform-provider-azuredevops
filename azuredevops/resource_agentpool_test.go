@@ -194,12 +194,12 @@ func TestAccAzureDevOpsAgentPool_CreateAndUpdate(t *testing.T) {
 	tfNode := "azuredevops_agent_pool.pool"
 
 	resource.Test(t, resource.TestCase{
-		PreCheck:     func() { testhelper.TestAccPreCheck(t, nil) },
+		PreCheck:     func() { testhelper.AccTestPreCheck(t, nil) },
 		Providers:    testAccProviders,
 		CheckDestroy: testAccAgentPoolCheckDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testhelper.TestAccAgentPoolResource(poolNameFirst),
+				Config: testhelper.AccTest_HCL_AgentPoolResource(poolNameFirst),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(tfNode, "name", poolNameFirst),
 					resource.TestCheckResourceAttr(tfNode, "auto_provision", "false"),
@@ -208,7 +208,7 @@ func TestAccAzureDevOpsAgentPool_CreateAndUpdate(t *testing.T) {
 				),
 			},
 			{
-				Config: testhelper.TestAccAgentPoolResource(poolNameSecond),
+				Config: testhelper.AccTest_HCL_AgentPoolResource(poolNameSecond),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(tfNode, "name", poolNameSecond),
 					resource.TestCheckResourceAttr(tfNode, "auto_provision", "false"),

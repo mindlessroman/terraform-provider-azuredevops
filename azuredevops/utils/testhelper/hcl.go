@@ -5,8 +5,8 @@ import (
 	"strings"
 )
 
-// TestAccAzureGitRepoResource HCL describing an AzDO GIT repository resource
-func TestAccAzureGitRepoResource(projectName string, gitRepoName string, initType string) string {
+// AccTest_HCL_AzureGitRepoResource HCL describing an AzDO GIT repository resource
+func AccTest_HCL_AzureGitRepoResource(projectName string, gitRepoName string, initType string) string {
 	azureGitRepoResource := fmt.Sprintf(`
 resource "azuredevops_git_repository" "gitrepo" {
 	project_id      = azuredevops_project.project.id
@@ -16,24 +16,24 @@ resource "azuredevops_git_repository" "gitrepo" {
 	}
 }`, gitRepoName, initType)
 
-	projectResource := TestAccProjectResource(projectName)
+	projectResource := AccTest_HCL_ProjectResource(projectName)
 	return fmt.Sprintf("%s\n%s", projectResource, azureGitRepoResource)
 }
 
-// TestAccGroupDataSource HCL describing an AzDO Group Data Source
-func TestAccGroupDataSource(projectName string, groupName string) string {
+// AccTest_HCL_GroupDataSource HCL describing an AzDO Group Data Source
+func AccTest_HCL_GroupDataSource(projectName string, groupName string) string {
 	dataSource := fmt.Sprintf(`
 data "azuredevops_group" "group" {
 	project_id = azuredevops_project.project.id
 	name       = "%s"
 }`, groupName)
 
-	projectResource := TestAccProjectResource(projectName)
+	projectResource := AccTest_HCL_ProjectResource(projectName)
 	return fmt.Sprintf("%s\n%s", projectResource, dataSource)
 }
 
-// TestAccProjectResource HCL describing an AzDO project
-func TestAccProjectResource(projectName string) string {
+// AccTest_HCL_ProjectResource HCL describing an AzDO project
+func AccTest_HCL_ProjectResource(projectName string) string {
 	if projectName == "" {
 		return ""
 	}
@@ -47,8 +47,8 @@ resource "azuredevops_project" "project" {
 }`, projectName, projectName)
 }
 
-// TestAccUserEntitlementResource HCL describing an AzDO UserEntitlement
-func TestAccUserEntitlementResource(principalName string) string {
+// AccTest_HCL_UserEntitlementResource HCL describing an AzDO UserEntitlement
+func AccTest_HCL_UserEntitlementResource(principalName string) string {
 	return fmt.Sprintf(`
 resource "azuredevops_user_entitlement" "user" {
 	principal_name     = "%s"
@@ -56,8 +56,8 @@ resource "azuredevops_user_entitlement" "user" {
 }`, principalName)
 }
 
-// TestAccServiceEndpointGitHubResource HCL describing an AzDO service endpoint
-func TestAccServiceEndpointGitHubResource(projectName string, serviceEndpointName string) string {
+// AccTest_HCL_ServiceEndpointGitHubResource HCL describing an AzDO service endpoint
+func AccTest_HCL_ServiceEndpointGitHubResource(projectName string, serviceEndpointName string) string {
 	serviceEndpointResource := fmt.Sprintf(`
 resource "azuredevops_serviceendpoint_github" "serviceendpoint" {
 	project_id             = azuredevops_project.project.id
@@ -66,24 +66,24 @@ resource "azuredevops_serviceendpoint_github" "serviceendpoint" {
 	}
 }`, serviceEndpointName)
 
-	projectResource := TestAccProjectResource(projectName)
+	projectResource := AccTest_HCL_ProjectResource(projectName)
 	return fmt.Sprintf("%s\n%s", projectResource, serviceEndpointResource)
 }
 
-// TestAccServiceEndpointDockerHubResource HCL describing an AzDO service endpoint
-func TestAccServiceEndpointDockerHubResource(projectName string, serviceEndpointName string) string {
+// AccTest_HCL_ServiceEndpointDockerHubResource HCL describing an AzDO service endpoint
+func AccTest_HCL_ServiceEndpointDockerHubResource(projectName string, serviceEndpointName string) string {
 	serviceEndpointResource := fmt.Sprintf(`
 resource "azuredevops_serviceendpoint_dockerhub" "serviceendpoint" {
 	project_id             = azuredevops_project.project.id
 	service_endpoint_name  = "%s"
 }`, serviceEndpointName)
 
-	projectResource := TestAccProjectResource(projectName)
+	projectResource := AccTest_HCL_ProjectResource(projectName)
 	return fmt.Sprintf("%s\n%s", projectResource, serviceEndpointResource)
 }
 
-// TestAccServiceEndpointAzureRMResource HCL describing an AzDO service endpoint
-func TestAccServiceEndpointAzureRMResource(projectName string, serviceEndpointName string) string {
+// AccTest_HCL_ServiceEndpointAzureRMResource HCL describing an AzDO service endpoint
+func AccTest_HCL_ServiceEndpointAzureRMResource(projectName string, serviceEndpointName string) string {
 	serviceEndpointResource := fmt.Sprintf(`
 resource "azuredevops_serviceendpoint_azurerm" "serviceendpointrm" {
 	project_id             = azuredevops_project.project.id
@@ -97,12 +97,12 @@ resource "azuredevops_serviceendpoint_azurerm" "serviceendpointrm" {
 
 }`, serviceEndpointName)
 
-	projectResource := TestAccProjectResource(projectName)
+	projectResource := AccTest_HCL_ProjectResource(projectName)
 	return fmt.Sprintf("%s\n%s", projectResource, serviceEndpointResource)
 }
 
-// TestAccVariableGroupResource HCL describing an AzDO variable group
-func TestAccVariableGroupResource(projectName string, variableGroupName string, allowAccess bool) string {
+// AccTest_HCL_VariableGroupResource HCL describing an AzDO variable group
+func AccTest_HCL_VariableGroupResource(projectName string, variableGroupName string, allowAccess bool) string {
 	variableGroupResource := fmt.Sprintf(`
 resource "azuredevops_variable_group" "vg" {
 	project_id  = azuredevops_project.project.id
@@ -125,12 +125,12 @@ resource "azuredevops_variable_group" "vg" {
 	}
 }`, variableGroupName, allowAccess)
 
-	projectResource := TestAccProjectResource(projectName)
+	projectResource := AccTest_HCL_ProjectResource(projectName)
 	return fmt.Sprintf("%s\n%s", projectResource, variableGroupResource)
 }
 
-// TestAccAgentPoolResource HCL describing an AzDO Agent Pool
-func TestAccAgentPoolResource(poolName string) string {
+// AccTest_HCL_AgentPoolResource HCL describing an AzDO Agent Pool
+func AccTest_HCL_AgentPoolResource(poolName string) string {
 	return fmt.Sprintf(`
 resource "azuredevops_agent_pool" "pool" {
 	name           = "%s"
@@ -139,8 +139,8 @@ resource "azuredevops_agent_pool" "pool" {
 	}`, poolName)
 }
 
-// TestAccBuildDefinitionResource HCL describing an AzDO build definition
-func TestAccBuildDefinitionResource(projectName string, buildDefinitionName string, buildPath string) string {
+// AccTest_HCL_BuildDefinitionResource HCL describing an AzDO build definition
+func AccTest_HCL_BuildDefinitionResource(projectName string, buildDefinitionName string, buildPath string) string {
 	buildDefinitionResource := fmt.Sprintf(`
 resource "azuredevops_build_definition" "build" {
 	project_id      = azuredevops_project.project.id
@@ -156,13 +156,13 @@ resource "azuredevops_build_definition" "build" {
 	}
 }`, buildDefinitionName, strings.ReplaceAll(buildPath, `\`, `\\`))
 
-	projectResource := TestAccProjectResource(projectName)
+	projectResource := AccTest_HCL_ProjectResource(projectName)
 	return fmt.Sprintf("%s\n%s", projectResource, buildDefinitionResource)
 }
 
-// TestAccGroupMembershipResource full terraform stanza to standup a group membership
-func TestAccGroupMembershipResource(projectName, groupName, userPrincipalName string) string {
-	membershipDependenciesStanza := TestAccGroupMembershipDependencies(projectName, groupName, userPrincipalName)
+// AccTest_HCL_GroupMembershipResource full terraform stanza to standup a group membership
+func AccTest_HCL_GroupMembershipResource(projectName, groupName, userPrincipalName string) string {
+	membershipDependenciesStanza := AccTest_HCL_GroupMembershipDependencies(projectName, groupName, userPrincipalName)
 	membershipStanza := `
 resource "azuredevops_group_membership" "membership" {
 	group = data.azuredevops_group.group.descriptor
@@ -172,8 +172,8 @@ resource "azuredevops_group_membership" "membership" {
 	return membershipDependenciesStanza + "\n" + membershipStanza
 }
 
-// TestAccGroupMembershipDependencies all the dependencies needed to configure a group membership
-func TestAccGroupMembershipDependencies(projectName, groupName, userPrincipalName string) string {
+// AccTest_HCL_GroupMembershipDependencies all the dependencies needed to configure a group membership
+func AccTest_HCL_GroupMembershipDependencies(projectName, groupName, userPrincipalName string) string {
 	return fmt.Sprintf(`
 resource "azuredevops_project" "project" {
 	project_name = "%s"
@@ -196,8 +196,8 @@ output "user_descriptor" {
 `, projectName, groupName, userPrincipalName)
 }
 
-// TestAccGroupResource HCL describing an AzDO group, if the projectName is empty, only a azuredevops_group instance is returned
-func TestAccGroupResource(groupResourceName, projectName, groupName string) string {
+// AccTest_HCL_GroupResource HCL describing an AzDO group, if the projectName is empty, only a azuredevops_group instance is returned
+func AccTest_HCL_GroupResource(groupResourceName, projectName, groupName string) string {
 	return fmt.Sprintf(`
 %s
 
@@ -209,5 +209,5 @@ resource "azuredevops_group" "%s" {
 output "group_id_%s" {
 	value = azuredevops_group.%s.id
 }
-`, TestAccProjectResource(projectName), groupResourceName, groupName, groupResourceName, groupResourceName)
+`, AccTest_HCL_ProjectResource(projectName), groupResourceName, groupName, groupResourceName, groupResourceName)
 }

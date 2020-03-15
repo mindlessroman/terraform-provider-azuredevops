@@ -20,16 +20,19 @@ func dataGroup() *schema.Resource {
 				ForceNew:     true,
 				Required:     true,
 				ValidateFunc: validation.NoZeroValues,
+				Description:  "The Group Name",
 			},
 			"project_id": {
 				Type:         schema.TypeString,
 				ForceNew:     true,
 				Required:     true,
 				ValidateFunc: validation.NoZeroValues,
+				Description:  "ID of the project in which to search for the group",
 			},
 			"descriptor": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The primary way to reference the graph subject",
 			},
 		},
 	}

@@ -288,12 +288,12 @@ func TestAccAzureGitRepo_CreateAndUpdate(t *testing.T) {
 	tfRepoNode := "azuredevops_git_repository.gitrepo"
 
 	resource.Test(t, resource.TestCase{
-		PreCheck:     func() { testhelper.TestAccPreCheck(t, nil) },
+		PreCheck:     func() { testhelper.AccTestPreCheck(t, nil) },
 		Providers:    testAccProviders,
 		CheckDestroy: testAccAzureGitRepoCheckDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testhelper.TestAccAzureGitRepoResource(projectName, gitRepoNameFirst, "Uninitialized"),
+				Config: testhelper.AccTest_HCL_AzureGitRepoResource(projectName, gitRepoNameFirst, "Uninitialized"),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet(tfRepoNode, "project_id"),
 					resource.TestCheckResourceAttr(tfRepoNode, "name", gitRepoNameFirst),
@@ -307,7 +307,7 @@ func TestAccAzureGitRepo_CreateAndUpdate(t *testing.T) {
 				),
 			},
 			{
-				Config: testhelper.TestAccAzureGitRepoResource(projectName, gitRepoNameSecond, "Uninitialized"),
+				Config: testhelper.AccTest_HCL_AzureGitRepoResource(projectName, gitRepoNameSecond, "Uninitialized"),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet(tfRepoNode, "project_id"),
 					resource.TestCheckResourceAttr(tfRepoNode, "name", gitRepoNameSecond),
@@ -380,12 +380,12 @@ func TestAccAzureGitRepo_RepoInitialization_Clean(t *testing.T) {
 	tfRepoNode := "azuredevops_git_repository.gitrepo"
 
 	resource.Test(t, resource.TestCase{
-		PreCheck:     func() { testhelper.TestAccPreCheck(t, nil) },
+		PreCheck:     func() { testhelper.AccTestPreCheck(t, nil) },
 		Providers:    testAccProviders,
 		CheckDestroy: testAccAzureGitRepoCheckDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testhelper.TestAccAzureGitRepoResource(projectName, gitRepoName, "Clean"),
+				Config: testhelper.AccTest_HCL_AzureGitRepoResource(projectName, gitRepoName, "Clean"),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet(tfRepoNode, "project_id"),
 					resource.TestCheckResourceAttr(tfRepoNode, "name", gitRepoName),
@@ -405,12 +405,12 @@ func TestAccAzureGitRepo_RepoInitialization_Uninitialized(t *testing.T) {
 	tfRepoNode := "azuredevops_git_repository.gitrepo"
 
 	resource.Test(t, resource.TestCase{
-		PreCheck:     func() { testhelper.TestAccPreCheck(t, nil) },
+		PreCheck:     func() { testhelper.AccTestPreCheck(t, nil) },
 		Providers:    testAccProviders,
 		CheckDestroy: testAccAzureGitRepoCheckDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testhelper.TestAccAzureGitRepoResource(projectName, gitRepoName, "Uninitialized"),
+				Config: testhelper.AccTest_HCL_AzureGitRepoResource(projectName, gitRepoName, "Uninitialized"),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet(tfRepoNode, "project_id"),
 					resource.TestCheckResourceAttr(tfRepoNode, "name", gitRepoName),

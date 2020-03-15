@@ -293,12 +293,12 @@ func TestAccAzureDevOpsProject_CreateAndUpdate(t *testing.T) {
 	tfNode := "azuredevops_project.project"
 
 	resource.Test(t, resource.TestCase{
-		PreCheck:     func() { testhelper.TestAccPreCheck(t, nil) },
+		PreCheck:     func() { testhelper.AccTestPreCheck(t, nil) },
 		Providers:    testAccProviders,
 		CheckDestroy: testAccProjectCheckDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testhelper.TestAccProjectResource(projectNameFirst),
+				Config: testhelper.AccTest_HCL_ProjectResource(projectNameFirst),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet(tfNode, "process_template_id"),
 					resource.TestCheckResourceAttr(tfNode, "project_name", projectNameFirst),
@@ -309,7 +309,7 @@ func TestAccAzureDevOpsProject_CreateAndUpdate(t *testing.T) {
 				),
 			},
 			{
-				Config: testhelper.TestAccProjectResource(projectNameSecond),
+				Config: testhelper.AccTest_HCL_ProjectResource(projectNameSecond),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet(tfNode, "process_template_id"),
 					resource.TestCheckResourceAttr(tfNode, "project_name", projectNameSecond),

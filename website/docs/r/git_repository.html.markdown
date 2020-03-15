@@ -37,7 +37,7 @@ The following arguments are supported:
 
 * `project_id` - (Required) The project ID or project name.
 * `name` - (Required) The name of the git repository.
-* `parent_id` - (Optional) The ID of a Git project from which a fork is to be created.
+* `parent_repository_id` - (Optional) The ID of a Git project from which a fork is to be created.
 * `initialization` - (Optional) An `initialization` block as documented below.
 
 `initialization` block supports the following:

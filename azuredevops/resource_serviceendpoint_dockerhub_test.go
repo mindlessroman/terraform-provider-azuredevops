@@ -175,7 +175,7 @@ func TestAccAzureDevOpsServiceEndpointDockerHub_CreateAndUpdate(t *testing.T) {
 	tfSvcEpNode := "azuredevops_serviceendpoint_dockerhub.serviceendpoint"
 	resource.Test(t, resource.TestCase{
 		PreCheck: func() {
-			testhelper.TestAccPreCheck(t, &[]string{
+			testhelper.AccTestPreCheck(t, &[]string{
 				"AZDO_DOCKERHUB_SERVICE_CONNECTION_USERNAME",
 				"AZDO_DOCKERHUB_SERVICE_CONNECTION_EMAIL",
 				"AZDO_DOCKERHUB_SERVICE_CONNECTION_PASSWORD",
@@ -185,7 +185,7 @@ func TestAccAzureDevOpsServiceEndpointDockerHub_CreateAndUpdate(t *testing.T) {
 		CheckDestroy: testAccServiceEndpointDockerHubCheckDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testhelper.TestAccServiceEndpointDockerHubResource(projectName, serviceEndpointNameFirst),
+				Config: testhelper.AccTest_HCL_ServiceEndpointDockerHubResource(projectName, serviceEndpointNameFirst),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet(tfSvcEpNode, "project_id"),
 					resource.TestCheckResourceAttrSet(tfSvcEpNode, "docker_username"),
@@ -196,7 +196,7 @@ func TestAccAzureDevOpsServiceEndpointDockerHub_CreateAndUpdate(t *testing.T) {
 					testAccCheckServiceEndpointDockerHubResourceExists(serviceEndpointNameFirst),
 				),
 			}, {
-				Config: testhelper.TestAccServiceEndpointDockerHubResource(projectName, serviceEndpointNameSecond),
+				Config: testhelper.AccTest_HCL_ServiceEndpointDockerHubResource(projectName, serviceEndpointNameSecond),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet(tfSvcEpNode, "project_id"),
 					resource.TestCheckResourceAttrSet(tfSvcEpNode, "docker_username"),

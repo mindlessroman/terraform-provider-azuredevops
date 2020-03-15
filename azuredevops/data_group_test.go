@@ -153,17 +153,17 @@ func createResourceData(t *testing.T, projectID string, groupName string) *schem
 
 // Validates that a configuration containing a project group lookup is able to read the resource correctly.
 // Because this is a data source, there are no resources to inspect in AzDO
-func TestAccGroupDataSource_Read_HappyPath(t *testing.T) {
+func AccTest_HCL_GroupDataSource_Read_HappyPath(t *testing.T) {
 	projectName := testAccResourcePrefix + acctest.RandStringFromCharSet(10, acctest.CharSetAlphaNum)
 	group := "Build Administrators"
 	tfBuildDefNode := "data.azuredevops_group.group"
 
 	resource.Test(t, resource.TestCase{
-		PreCheck:  func() { testhelper.TestAccPreCheck(t, nil) },
+		PreCheck:  func() { testhelper.AccTestPreCheck(t, nil) },
 		Providers: testAccProviders,
 		Steps: []resource.TestStep{
 			{
-				Config: testhelper.TestAccGroupDataSource(projectName, group),
+				Config: testhelper.AccTest_HCL_GroupDataSource(projectName, group),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet(tfBuildDefNode, "name"),
 					resource.TestCheckResourceAttrSet(tfBuildDefNode, "project_id"),

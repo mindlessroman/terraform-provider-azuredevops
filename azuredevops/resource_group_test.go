@@ -350,19 +350,19 @@ func TestGroupResource_Create_TestParameterCollisions(t *testing.T) {
 
 var tfAccTestGroupNode = "azuredevops_group.mygroup"
 
-func TestAccGroupResource_CreateAndUpdate(t *testing.T) {
-	t.Skip("Skipping test TestAccGroupResource_CreateAndUpdate: broken graph implementation in Go Azure DevOps REST API")
+func AccTest_HCL_GroupResource_CreateAndUpdate(t *testing.T) {
+	t.Skip("Skipping test AccTest_HCL_GroupResource_CreateAndUpdate: broken graph implementation in Go Azure DevOps REST API")
 
 	projectName := testhelper.TestAccResourcePrefix + acctest.RandStringFromCharSet(10, acctest.CharSetAlphaNum)
 	groupName := testhelper.TestAccResourcePrefix + acctest.RandStringFromCharSet(10, acctest.CharSetAlphaNum)
 
 	resource.Test(t, resource.TestCase{
-		PreCheck:     func() { testhelper.TestAccPreCheck(t, nil) },
+		PreCheck:     func() { testhelper.AccTestPreCheck(t, nil) },
 		Providers:    testAccProviders,
 		CheckDestroy: testAccGroupCheckDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testhelper.TestAccGroupResource("mygroup", projectName, groupName),
+				Config: testhelper.AccTest_HCL_GroupResource("mygroup", projectName, groupName),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet(tfAccTestGroupNode, "scope"),
 					resource.TestCheckResourceAttr(tfAccTestGroupNode, "display_name", groupName),

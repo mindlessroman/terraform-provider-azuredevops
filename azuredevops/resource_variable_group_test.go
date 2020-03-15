@@ -83,19 +83,19 @@ func TestAccAzureDevOpsVariableGroup_CreateAndUpdate(t *testing.T) {
 
 	tfVarGroupNode := "azuredevops_variable_group.vg"
 	resource.Test(t, resource.TestCase{
-		PreCheck:     func() { testhelper.TestAccPreCheck(t, nil) },
+		PreCheck:     func() { testhelper.AccTestPreCheck(t, nil) },
 		Providers:    testAccProviders,
 		CheckDestroy: testAccVariableGroupCheckDestroy,
 		Steps: []resource.TestStep{
 			{
-				Config: testhelper.TestAccVariableGroupResource(projectName, vargroupNameFirst, allowAccessFirst),
+				Config: testhelper.AccTest_HCL_VariableGroupResource(projectName, vargroupNameFirst, allowAccessFirst),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet(tfVarGroupNode, "project_id"),
 					resource.TestCheckResourceAttr(tfVarGroupNode, "name", vargroupNameFirst),
 					testAccCheckVariableGroupResourceExists(vargroupNameFirst, allowAccessFirst),
 				),
 			}, {
-				Config: testhelper.TestAccVariableGroupResource(projectName, vargroupNameSecond, allowAccessSecond),
+				Config: testhelper.AccTest_HCL_VariableGroupResource(projectName, vargroupNameSecond, allowAccessSecond),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet(tfVarGroupNode, "project_id"),
 					resource.TestCheckResourceAttr(tfVarGroupNode, "name", vargroupNameSecond),

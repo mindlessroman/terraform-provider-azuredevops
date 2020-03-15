@@ -113,15 +113,15 @@ func TestGroupMembership_Read_DoesNotSwallowErrors(t *testing.T) {
 	groupName := "Build Administrators"
 	tfNode := "azuredevops_group_membership.membership"
 
-	tfStanzaWithMembership := testAccGroupMembershipResource(projectName, groupName, userPrincipalName)
-	tfStanzaWithoutMembership := testAccGroupMembershipDependencies(projectName, groupName, userPrincipalName)
+	tfStanzaWithMembership := AccTest_HCL_GroupMembershipResource(projectName, groupName, userPrincipalName)
+	tfStanzaWithoutMembership := AccTest_HCL_GroupMembershipDependencies(projectName, groupName, userPrincipalName)
 
 	// 	// This test differs from most other acceptance tests in the following ways:
 	// 	//	- The second step is the same as the first except it omits the group membershp.
 	// 	//	  This lets us test that the membership is removed in isolation of the project being deleted
 	// 	//	- There is no CheckDestroy function because that is covered based on the above point
 	resource.Test(t, resource.TestCase{
-		PreCheck:  func() { testAccPreCheck(t) },
+		PreCheck:  func() { AccTestPreCheck(t) },
 		Providers: testAccProviders,
 		Steps: []resource.TestStep{
 			{

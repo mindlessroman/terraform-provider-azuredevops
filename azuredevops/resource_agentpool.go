@@ -27,6 +27,7 @@ func resourceAzureAgentPool() *schema.Resource {
 				ForceNew:     false,
 				Required:     true,
 				ValidateFunc: validate.NoEmptyStrings,
+				Description:  "The nam of the agent pool",
 			},
 			"pool_type": {
 				Type:         schema.TypeString,
@@ -34,11 +35,13 @@ func resourceAzureAgentPool() *schema.Resource {
 				ForceNew:     true,
 				Default:      taskagent.TaskAgentPoolTypeValues.Automation,
 				ValidateFunc: validation.StringInSlice([]string{string(taskagent.TaskAgentPoolTypeValues.Automation), string(taskagent.TaskAgentPoolTypeValues.Deployment)}, false),
+				Description:  "Specifies whether the agent pool type is Automation or Deployment",
 			},
 			"auto_provision": {
-				Type:     schema.TypeBool,
-				Optional: true,
-				Default:  false,
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Default:     false,
+				Description: "Specifies whether or not a queue should be automatically provisioned for each project collection",
 			},
 		},
 	}

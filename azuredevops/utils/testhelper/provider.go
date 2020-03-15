@@ -5,8 +5,8 @@ import (
 	"testing"
 )
 
-// TestAccPreCheck pre-check to validate that the correct environment variables are set prior to running any acceptance test
-func TestAccPreCheck(t *testing.T, additionalEnvVars *[]string) {
+// AccTestPreCheck pre-check to validate that the correct environment variables are set prior to running any acceptance test
+func AccTestPreCheck(t *testing.T, additionalEnvVars *[]string) {
 	requiredEnvVars := []string{
 		"AZDO_ORG_SERVICE_URL",
 		"AZDO_PERSONAL_ACCESS_TOKEN",
