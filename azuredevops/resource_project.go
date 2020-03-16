@@ -2,12 +2,13 @@ package azuredevops
 
 import (
 	"fmt"
-	"github.com/microsoft/terraform-provider-azuredevops/azuredevops/utils/tfhelper"
 	"log"
 	"os"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/microsoft/terraform-provider-azuredevops/azuredevops/utils/tfhelper"
 
 	"github.com/microsoft/terraform-provider-azuredevops/azuredevops/utils/config"
 	"github.com/microsoft/terraform-provider-azuredevops/azuredevops/utils/converter"
@@ -296,7 +297,10 @@ func flattenProject(clients *config.AggregatedClient, d *schema.ResourceData, pr
 	d.Set("version_control", (*project.Capabilities)["versioncontrol"]["sourceControlType"])
 	d.Set("process_template_id", processTemplateID)
 	d.Set("work_item_template", processTemplateName)
-	return d.Set("visibility", project.Visibility)
+	if project.Visibility != nil {
+		d.Set("visibility", string(*project.Visibility))
+	}
+	return nil
 }
 
 // given a process template name, get the process template ID

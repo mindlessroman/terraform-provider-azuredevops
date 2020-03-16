@@ -147,8 +147,8 @@ func flattenAzureAgentPool(d *schema.ResourceData, agentPool *taskagent.TaskAgen
 	d.SetId(strconv.Itoa(*agentPool.Id))
 	d.Set("name", converter.ToString(agentPool.Name, ""))
 	d.Set("auto_provision", agentPool.AutoProvision)
-	err := d.Set("pool_type", agentPool.PoolType)
-	return err
+	d.Set("pool_type", string(*agentPool.PoolType))
+	return nil
 }
 
 func expandAgentPool(d *schema.ResourceData, forCreate bool) (*taskagent.TaskAgentPool, error) {

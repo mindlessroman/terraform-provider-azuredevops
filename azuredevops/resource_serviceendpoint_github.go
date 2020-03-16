@@ -157,7 +157,10 @@ func flattenServiceEndpointGitHub(d *schema.ResourceData, serviceEndpoint *servi
 			hash, key := tfhelper.HelpFlattenSecretNested(d, "auth_personal", params, personalAccessToken)
 			params[key] = hash
 
-			d.Set("auth_personal", authPersonalList)
+			err := d.Set("auth_personal", authPersonalList)
+			if err != nil {
+				return err
+			}
 		}
 	}
 	return nil

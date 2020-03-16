@@ -132,7 +132,7 @@ func resourceGitRepositoryCreate(d *schema.ResourceData, meta interface{}) error
 	}
 
 	var parentRepoRef *git.GitRepositoryRef = nil
-	if parentRepoID, ok := d.GetOkExists("parent_repository_id"); ok {
+	if parentRepoID, ok := d.GetOk("parent_repository_id"); ok {
 		parentRepo, err := gitRepositoryRead(clients, parentRepoID.(string), "", "")
 		if err != nil {
 			return fmt.Errorf("Failed to locate parent repository [%s]: %+v", parentRepoID, err)
@@ -308,7 +308,10 @@ func flattenGitRepository(d *schema.ResourceData, repository *git.GitRepository)
 	d.Set("ssh_url", converter.ToString(repository.SshUrl, ""))
 	d.Set("url", converter.ToString(repository.Url, ""))
 	d.Set("web_url", converter.ToString(repository.WebUrl, ""))
-	return d.Set("size", repository.Size)
+	if repository.Size != nil {
+		d.Set("size", int(*repository.Size))
+	}
+	return nil
 }
 
 // Convert internal Terraform data structure to an AzDO data structure. Note: only the params that are
