@@ -154,8 +154,8 @@ func flattenServiceEndpointGitHub(d *schema.ResourceData, serviceEndpoint *servi
 		authPersonalList := d.Get("auth_personal").([]interface{})
 		if len(authPersonalList) == 1 {
 			params := authPersonalList[0].(map[string]interface{})
-			hash, _ := tfhelper.HelpFlattenSecretNested(d, "auth_personal", params, personalAccessToken)
-			params[personalAccessToken] = hash
+			hash, key := tfhelper.HelpFlattenSecretNested(d, "auth_personal", params, personalAccessToken)
+			params[key] = hash
 
 			d.Set("auth_personal", authPersonalList)
 		}
