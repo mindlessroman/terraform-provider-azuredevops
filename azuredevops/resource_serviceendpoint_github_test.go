@@ -50,8 +50,8 @@ var ghTestServiceEndpoint = serviceendpoint.ServiceEndpoint{
 // verifies that the flatten/expand round trip yields the same service endpoint
 func TestAzureDevOpsServiceEndpointGitHub_ExpandFlatten_Roundtrip(t *testing.T) {
 	resourceData := schema.TestResourceDataRaw(t, resourceServiceEndpointGitHub().Schema, nil)
-	configureAuthPersonal(resourceData)
 	flattenServiceEndpointGitHub(resourceData, &ghTestServiceEndpoint, ghTestServiceEndpointProjectID)
+	configureAuthPersonal(resourceData)
 
 	serviceEndpointAfterRoundTrip, projectID := expandServiceEndpointGitHub(resourceData)
 	require.Equal(t, ghTestServiceEndpoint, *serviceEndpointAfterRoundTrip)
@@ -65,8 +65,8 @@ func TestAzureDevOpsServiceEndpointGitHub_Create_DoesNotSwallowError(t *testing.
 
 	r := resourceServiceEndpointGitHub()
 	resourceData := schema.TestResourceDataRaw(t, r.Schema, nil)
-	configureAuthPersonal(resourceData)
 	flattenServiceEndpointGitHub(resourceData, &ghTestServiceEndpoint, ghTestServiceEndpointProjectID)
+	configureAuthPersonal(resourceData)
 
 	buildClient := azdosdkmocks.NewMockServiceendpointClient(ctrl)
 	clients := &config.AggregatedClient{ServiceEndpointClient: buildClient, Ctx: context.Background()}
@@ -135,8 +135,8 @@ func TestAzureDevOpsServiceEndpointGitHub_Update_DoesNotSwallowError(t *testing.
 
 	r := resourceServiceEndpointGitHub()
 	resourceData := schema.TestResourceDataRaw(t, r.Schema, nil)
-	configureAuthPersonal(resourceData)
 	flattenServiceEndpointGitHub(resourceData, &ghTestServiceEndpoint, ghTestServiceEndpointProjectID)
+	configureAuthPersonal(resourceData)
 
 	buildClient := azdosdkmocks.NewMockServiceendpointClient(ctrl)
 	clients := &config.AggregatedClient{ServiceEndpointClient: buildClient, Ctx: context.Background()}
