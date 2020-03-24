@@ -54,7 +54,7 @@ func resourceVariableGroup() *schema.Resource {
 				Default:  false,
 			},
 			"variable": {
-				Type: schema.TypeSet,
+				Type: schema.TypeList,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"name": {
@@ -73,8 +73,9 @@ func resourceVariableGroup() *schema.Resource {
 						},
 					},
 				},
-				Required: true,
-				MinItems: 1,
+				ValidateFunc: validate.ListOfMapsHasNoDuplicateKeys("name"),
+				Required:     true,
+				MinItems:     1,
 			},
 		},
 	}
@@ -228,7 +229,7 @@ func deleteVariableGroup(clients *config.AggregatedClient, project *string, vari
 // Convert internal Terraform data structure to an AzDO data structure
 func expandVariableGroupParameters(d *schema.ResourceData) (*taskagent.VariableGroupParameters, *string) {
 	projectID := converter.String(d.Get("project_id").(string))
-	variables := d.Get("variable").(*schema.Set).List()
+	variables := d.Get("variable").([]interface{})
 
 	variableMap := make(map[string]taskagent.VariableValue)
 
