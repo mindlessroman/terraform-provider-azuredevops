@@ -94,6 +94,7 @@ func TestAccAzureDevOpsVariableGroup_CreateAndUpdate(t *testing.T) {
 					resource.TestCheckResourceAttr(tfVarGroupNode, "name", vargroupNameFirst),
 					testAccCheckVariableGroupResourceExists(vargroupNameFirst, allowAccessFirst),
 				),
+				ExpectNonEmptyPlan: true,
 			}, {
 				Config: testhelper.TestAccVariableGroupResource(projectName, vargroupNameSecond, allowAccessSecond),
 				Check: resource.ComposeTestCheckFunc(
@@ -101,6 +102,7 @@ func TestAccAzureDevOpsVariableGroup_CreateAndUpdate(t *testing.T) {
 					resource.TestCheckResourceAttr(tfVarGroupNode, "name", vargroupNameSecond),
 					testAccCheckVariableGroupResourceExists(vargroupNameSecond, allowAccessSecond),
 				),
+				ExpectNonEmptyPlan: true,
 			},
 			{
 				// Resource Acceptance Testing https://www.terraform.io/docs/extend/resources/import.html#resource-acceptance-testing-implementation
