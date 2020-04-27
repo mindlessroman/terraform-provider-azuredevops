@@ -13,6 +13,7 @@ import (
 	"github.com/microsoft/azure-devops-go-api/azuredevops/graph"
 	"github.com/microsoft/azure-devops-go-api/azuredevops/memberentitlementmanagement"
 	"github.com/microsoft/azure-devops-go-api/azuredevops/operations"
+	"github.com/microsoft/azure-devops-go-api/azuredevops/policy"
 	"github.com/microsoft/azure-devops-go-api/azuredevops/serviceendpoint"
 	"github.com/microsoft/azure-devops-go-api/azuredevops/taskagent"
 )
@@ -30,6 +31,7 @@ type AggregatedClient struct {
 	GitReposClient                git.Client
 	GraphClient                   graph.Client
 	OperationsClient              operations.Client
+	PolicyClient                  policy.Client
 	ServiceEndpointClient         serviceendpoint.Client
 	TaskAgentClient               taskagent.Client
 	MemberEntitleManagementClient memberentitlementmanagement.Client
@@ -106,12 +108,20 @@ func GetAzdoClient(azdoPAT string, organizationURL string) (*AggregatedClient, e
 		return nil, err
 	}
 
+	// https://docs.microsoft.com/en-us/rest/api/azure/devops/policy/configurations/create?view=azure-devops-rest-5.1
+	policyClient, err := policy.NewClient(ctx, connection)
+	if err != nil {
+		log.Printf("getAzdoClient(): policy.NewClient failed.")
+		return nil, err
+	}
+
 	aggregatedClient := &AggregatedClient{
 		CoreClient:                    coreClient,
 		BuildClient:                   buildClient,
 		GitReposClient:                gitReposClient,
 		GraphClient:                   graphClient,
 		OperationsClient:              operationsClient,
+		PolicyClient:                  policyClient,
 		ServiceEndpointClient:         serviceEndpointClient,
 		TaskAgentClient:               taskagentClient,
 		MemberEntitleManagementClient: memberentitlementmanagementClient,
