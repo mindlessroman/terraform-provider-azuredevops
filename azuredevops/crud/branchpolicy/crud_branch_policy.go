@@ -43,17 +43,9 @@ const (
 
 // PolicyCrudArgs arguments for GenBasePolicyResource
 type PolicyCrudArgs struct {
-	FlattenFunc func(d *schema.ResourceData, policy *policy.PolicyConfiguration, projectID *string)
+	FlattenFunc func(d *schema.ResourceData, policy *policy.PolicyConfiguration, projectID *string) error
 	ExpandFunc  func(d *schema.ResourceData, typeID uuid.UUID) (*policy.PolicyConfiguration, *string, error)
 	PolicyType  uuid.UUID
-}
-
-type commonPolicySettings struct {
-	Scopes []struct {
-		RepositoryID      string `json:"repositoryId"`
-		RepositoryRefName string `json:"refName"`
-		MatchType         string `json:"matchKind"`
-	} `json:"scope"`
 }
 
 // GenBasePolicyResource creates a Resource with the common elements of a build policy
@@ -68,34 +60,58 @@ func GenBasePolicyResource(crudArgs *PolicyCrudArgs) *schema.Resource {
 	}
 }
 
+type commonPolicySettings struct {
+	Scopes []struct {
+		RepositoryID      string `json:"repositoryId"`
+		RepositoryRefName string `json:"refName"`
+		MatchType         string `json:"matchKind"`
+	} `json:"scope"`
+}
+
 // BaseFlattenFunc flattens each of the base elements of the schema
-func BaseFlattenFunc(d *schema.ResourceData, policyConfig *policy.PolicyConfiguration, projectID *string) {
+func BaseFlattenFunc(d *schema.ResourceData, policyConfig *policy.PolicyConfiguration, projectID *string) error {
+	if policyConfig.Id == nil {
+		d.SetId("")
+		return nil
+	}
 	d.SetId(strconv.Itoa(*policyConfig.Id))
 	d.Set(SchemaProjectID, converter.ToString(projectID, ""))
 	d.Set(SchemaEnabled, converter.ToBool(policyConfig.IsEnabled, true))
 	d.Set(SchemaBlocking, converter.ToBool(policyConfig.IsBlocking, true))
-	d.Set(SchemaSettings, flattenSettings(d, policyConfig))
+	settings, err := flattenSettings(d, policyConfig)
+	if err != nil {
+		return err
+	}
+	err = d.Set(SchemaSettings, settings)
+	if err != nil {
+		return fmt.Errorf("Unable to persist policy settings configuration: %+v", err)
+	}
+	return nil
 }
 
-func flattenSettings(d *schema.ResourceData, policyConfig *policy.PolicyConfiguration) []interface{} {
+func flattenSettings(d *schema.ResourceData, policyConfig *policy.PolicyConfiguration) ([]interface{}, error) {
 	policySettings := commonPolicySettings{}
-	json.Unmarshal([]byte(fmt.Sprintf("%v", policyConfig.Settings)), &policySettings)
+	policyAsJSON, err := json.Marshal(policyConfig.Settings)
+	if err != nil {
+		return nil, fmt.Errorf("Unable to marshal policy settings into JSON: %+v", err)
+	}
 
+	json.Unmarshal(policyAsJSON, &policySettings)
 	scopes := make([]interface{}, len(policySettings.Scopes))
 	for index, scope := range policySettings.Scopes {
 		scopes[index] = map[string]interface{}{
-			SchemaScope: map[string]interface{}{
-				SchemaRepositoryID:  scope.RepositoryID,
-				SchemaRepositoryRef: scope.RepositoryRefName,
-				SchemaMatchType:     scope.MatchType,
-			},
+			SchemaRepositoryID:  scope.RepositoryID,
+			SchemaRepositoryRef: scope.RepositoryRefName,
+			SchemaMatchType:     scope.MatchType,
 		}
 	}
-	return []interface{}{
+	settings := []interface{}{
 		map[string]interface{}{
 			SchemaScope: scopes,
 		},
 	}
+	fmt.Println(scopes)
+	return settings, nil
 }
 
 // BaseExpandFunc expands each of the base elements of the schema
@@ -127,7 +143,7 @@ func expandSettings(d *schema.ResourceData) map[string]interface{} {
 	settings := settingsList[0].(map[string]interface{})
 	settingsScopes := settings[SchemaScope].([]interface{})
 
-	scopes := make([]interface{}, len(settingsScopes))
+	scopes := make([]map[string]interface{}, len(settingsScopes))
 	for index, scope := range settingsScopes {
 		scopeMap := scope.(map[string]interface{})
 		scopes[index] = map[string]interface{}{
@@ -209,7 +225,7 @@ func genPolicyCreateFunc(crudArgs *PolicyCrudArgs) schema.CreateFunc {
 			Project:       projectID,
 		})
 
-		if err != nil) {
+		if err != nil {
 			return fmt.Errorf("Error creating policy in Azure DevOps: %+v", err)
 		}
 

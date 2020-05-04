@@ -43,8 +43,11 @@ func resourceBranchPolicyMinReviewers() *schema.Resource {
 	return resource
 }
 
-func flattenFunc(d *schema.ResourceData, policy *policy.PolicyConfiguration, projectID *string) {
-	branchpolicy.BaseFlattenFunc(d, policy, projectID)
+func flattenFunc(d *schema.ResourceData, policy *policy.PolicyConfiguration, projectID *string) error {
+	err := branchpolicy.BaseFlattenFunc(d, policy, projectID)
+	if err != nil {
+		return err
+	}
 	policySettings := minReviewerPolicySettings{}
 	json.Unmarshal([]byte(fmt.Sprintf("%v", policy.Settings)), &policySettings)
 
@@ -55,6 +58,7 @@ func flattenFunc(d *schema.ResourceData, policy *policy.PolicyConfiguration, pro
 	settings[schemaSubmitterCanVote] = policySettings.SubmitterCanVote
 
 	d.Set(branchpolicy.SchemaSettings, settings)
+	return nil
 }
 
 func expandFunc(d *schema.ResourceData, typeID uuid.UUID) (*policy.PolicyConfiguration, *string, error) {
