@@ -43,13 +43,21 @@ func resourceBranchPolicyMinReviewers() *schema.Resource {
 	return resource
 }
 
-func flattenFunc(d *schema.ResourceData, policy *policy.PolicyConfiguration, projectID *string) error {
-	err := branchpolicy.BaseFlattenFunc(d, policy, projectID)
+func flattenFunc(d *schema.ResourceData, policyConfig *policy.PolicyConfiguration, projectID *string) error {
+	err := branchpolicy.BaseFlattenFunc(d, policyConfig, projectID)
 	if err != nil {
 		return err
 	}
+	policyAsJSON, err := json.Marshal(policyConfig.Settings)
+	if err != nil {
+		return fmt.Errorf("Unable to marshal policy settings into JSON: %+v", err)
+	}
+
 	policySettings := minReviewerPolicySettings{}
-	json.Unmarshal([]byte(fmt.Sprintf("%v", policy.Settings)), &policySettings)
+	err = json.Unmarshal(policyAsJSON, &policySettings)
+	if err != nil {
+		return fmt.Errorf("Unable to unmarshal branch policy settings (%+v): %+v", policySettings, err)
+	}
 
 	settingsList := d.Get(branchpolicy.SchemaSettings).([]interface{})
 	settings := settingsList[0].(map[string]interface{})
@@ -57,7 +65,7 @@ func flattenFunc(d *schema.ResourceData, policy *policy.PolicyConfiguration, pro
 	settings[schemaReviewerCount] = policySettings.ApprovalCount
 	settings[schemaSubmitterCanVote] = policySettings.SubmitterCanVote
 
-	d.Set(branchpolicy.SchemaSettings, settings)
+	d.Set(branchpolicy.SchemaSettings, settingsList)
 	return nil
 }
 

@@ -13,6 +13,7 @@ import (
 	"github.com/microsoft/terraform-provider-azuredevops/azuredevops/utils"
 	"github.com/microsoft/terraform-provider-azuredevops/azuredevops/utils/config"
 	"github.com/microsoft/terraform-provider-azuredevops/azuredevops/utils/converter"
+	"github.com/microsoft/terraform-provider-azuredevops/azuredevops/utils/suppress"
 )
 
 // Policy type IDs. These are global and can be listed using the following endpoint:
@@ -110,7 +111,6 @@ func flattenSettings(d *schema.ResourceData, policyConfig *policy.PolicyConfigur
 			SchemaScope: scopes,
 		},
 	}
-	fmt.Println(scopes)
 	return settings, nil
 }
 
@@ -191,9 +191,10 @@ func genBaseSchema() map[string]*schema.Schema {
 									Optional: true,
 								},
 								SchemaMatchType: {
-									Type:     schema.TypeString,
-									Optional: true,
-									Default:  matchTypeExact,
+									Type:             schema.TypeString,
+									Optional:         true,
+									Default:          matchTypeExact,
+									DiffSuppressFunc: suppress.CaseDifference,
 									ValidateFunc: validation.StringInSlice([]string{
 										matchTypeExact, matchTypePrefix,
 									}, true),
@@ -229,8 +230,7 @@ func genPolicyCreateFunc(crudArgs *PolicyCrudArgs) schema.CreateFunc {
 			return fmt.Errorf("Error creating policy in Azure DevOps: %+v", err)
 		}
 
-		crudArgs.FlattenFunc(d, createdPolicy, projectID)
-		return nil
+		return crudArgs.FlattenFunc(d, createdPolicy, projectID)
 	}
 }
 
@@ -258,8 +258,7 @@ func genPolicyReadFunc(crudArgs *PolicyCrudArgs) schema.ReadFunc {
 			return fmt.Errorf("Error looking up build policy configuration with ID (%v) and project ID (%v): %v", policyID, projectID, err)
 		}
 
-		crudArgs.FlattenFunc(d, policyConfig, &projectID)
-		return nil
+		return crudArgs.FlattenFunc(d, policyConfig, &projectID)
 	}
 }
 
@@ -281,8 +280,7 @@ func genPolicyUpdateFunc(crudArgs *PolicyCrudArgs) schema.UpdateFunc {
 			return fmt.Errorf("Error updating policy in Azure DevOps: %+v", err)
 		}
 
-		crudArgs.FlattenFunc(d, updatedPolicy, projectID)
-		return nil
+		return crudArgs.FlattenFunc(d, updatedPolicy, projectID)
 	}
 }
 
