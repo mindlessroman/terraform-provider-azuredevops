@@ -1,4 +1,4 @@
-package branchpolicy
+package azuredevops
 
 import (
 	"encoding/json"
@@ -9,6 +9,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
 
 	"github.com/microsoft/azure-devops-go-api/azuredevops/policy"
+	"github.com/microsoft/terraform-provider-azuredevops/azuredevops/crud/branchpolicy"
 )
 
 const (
@@ -21,14 +22,14 @@ type minReviewerPolicySettings struct {
 	SubmitterCanVote bool `json:"creatorVoteCounts"`
 }
 
-func ResourceBranchPolicyMinReviewers() *schema.Resource {
-	resource := genBasePolicyResource(&policyCrudArgs{
+func resourceBranchPolicyMinReviewers() *schema.Resource {
+	resource := branchpolicy.GenBasePolicyResource(&branchpolicy.PolicyCrudArgs{
 		flattenFunc,
 		expandFunc,
-		minReviewerCount,
+		branchpolicy.MinReviewerCount,
 	})
 
-	settingsSchema := resource.Schema[schemaSettings].Elem.(*schema.Resource).Schema
+	settingsSchema := resource.Schema[branchpolicy.SchemaSettings].Elem.(*schema.Resource).Schema
 	settingsSchema[schemaReviewerCount] = &schema.Schema{
 		Type:         schema.TypeInt,
 		Required:     true,
@@ -43,30 +44,30 @@ func ResourceBranchPolicyMinReviewers() *schema.Resource {
 }
 
 func flattenFunc(d *schema.ResourceData, policy *policy.PolicyConfiguration, projectID *string) error {
-	err := baseFlattenFunc(d, policy, projectID)
+	err := branchpolicy.BaseFlattenFunc(d, policy, projectID)
 	if err != nil {
 		return err
 	}
 	policySettings := minReviewerPolicySettings{}
 	json.Unmarshal([]byte(fmt.Sprintf("%v", policy.Settings)), &policySettings)
 
-	settingsList := d.Get(schemaSettings).([]interface{})
+	settingsList := d.Get(branchpolicy.SchemaSettings).([]interface{})
 	settings := settingsList[0].(map[string]interface{})
 
 	settings[schemaReviewerCount] = policySettings.ApprovalCount
 	settings[schemaSubmitterCanVote] = policySettings.SubmitterCanVote
 
-	d.Set(schemaSettings, settings)
+	d.Set(branchpolicy.SchemaSettings, settings)
 	return nil
 }
 
 func expandFunc(d *schema.ResourceData, typeID uuid.UUID) (*policy.PolicyConfiguration, *string, error) {
-	policyConfig, projectID, err := baseExpandFunc(d, typeID)
+	policyConfig, projectID, err := branchpolicy.BaseExpandFunc(d, typeID)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	settingsList := d.Get(schemaSettings).([]interface{})
+	settingsList := d.Get(branchpolicy.SchemaSettings).([]interface{})
 	settings := settingsList[0].(map[string]interface{})
 
 	policySettings := policyConfig.Settings.(map[string]interface{})

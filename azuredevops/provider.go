@@ -2,7 +2,6 @@ package azuredevops
 
 import (
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"github.com/microsoft/terraform-provider-azuredevops/azuredevops/branchpolicy"
 	"github.com/microsoft/terraform-provider-azuredevops/azuredevops/utils/config"
 )
 
@@ -11,7 +10,7 @@ func Provider() *schema.Provider {
 	p := &schema.Provider{
 		ResourcesMap: map[string]*schema.Resource{
 			"azuredevops_build_definition":            resourceBuildDefinition(),
-			"azuredevops_branch_policy_min_reviewers": branchpolicy.ResourceBranchPolicyMinReviewers(),
+			"azuredevops_branch_policy_min_reviewers": resourceBranchPolicyMinReviewers(),
 			"azuredevops_project":                     resourceProject(),
 			"azuredevops_variable_group":              resourceVariableGroup(),
 			"azuredevops_serviceendpoint_azurerm":     resourceServiceEndpointAzureRM(),

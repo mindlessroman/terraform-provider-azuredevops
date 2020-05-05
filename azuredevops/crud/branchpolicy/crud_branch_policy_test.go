@@ -44,15 +44,15 @@ var testPolicy = &policy.PolicyConfiguration{
 	},
 }
 
-var testResource = genBasePolicyResource(&policyCrudArgs{
-	baseFlattenFunc,
-	baseExpandFunc,
+var testResource = GenBasePolicyResource(&PolicyCrudArgs{
+	BaseFlattenFunc,
+	BaseExpandFunc,
 	randomUUID,
 })
 
 func getFlattenedResourceData(t *testing.T) *schema.ResourceData {
 	resourceData := schema.TestResourceDataRaw(t, testResource.Schema, nil)
-	err := baseFlattenFunc(resourceData, testPolicy, &projectID)
+	err := BaseFlattenFunc(resourceData, testPolicy, &projectID)
 	require.Nil(t, err)
 	return resourceData
 }
@@ -60,7 +60,7 @@ func getFlattenedResourceData(t *testing.T) *schema.ResourceData {
 // verifies that the flatten/expand round trip path produces repeatable results
 func TestBranchPolicyCRUD_ExpandFlatten_Roundtrip(t *testing.T) {
 	resourceData := getFlattenedResourceData(t)
-	expandedPolicy, expandedProjectID, err := baseExpandFunc(resourceData, randomUUID)
+	expandedPolicy, expandedProjectID, err := BaseExpandFunc(resourceData, randomUUID)
 	require.Nil(t, err)
 
 	require.Equal(t, testPolicy, expandedPolicy)
