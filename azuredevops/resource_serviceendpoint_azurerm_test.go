@@ -224,6 +224,16 @@ func TestAzureDevOpsServiceEndpointAzureRM_Update_DoesNotSwallowError(t *testing
 	}
 }
 
+func TestAzureDevOpsServiceEndpointAzureRM_ExpandCredentials(t *testing.T) {
+	spnKeyExistsWithValue := map[string]interface{}{"serviceprincipalkey": "fake-spn-key"}
+	spnKeyExistsWithEmptyValue := map[string]interface{}{"serviceprincipalkey": ""}
+	spnKeyDoesNotExists := map[string]interface{}{}
+
+	require.Equal(t, expandSpnKey(spnKeyExistsWithValue), "fake-spn-key")
+	require.Equal(t, expandSpnKey(spnKeyExistsWithEmptyValue), "null")
+	require.Equal(t, expandSpnKey(spnKeyDoesNotExists), "null")
+}
+
 /**
  * Begin acceptance tests
  */
