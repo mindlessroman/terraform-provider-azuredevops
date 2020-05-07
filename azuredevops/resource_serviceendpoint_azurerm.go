@@ -106,12 +106,12 @@ func expandSpnKey(credentials map[string]interface{}) string {
 	// This step is critical in order to ensure that the service connection can update without loosing its password!
 	//
 	// This behavior is unfortunately not documented in the API documentation.
-	spnKeyI, ok := credentials["serviceprincipalkey"]
-	if !ok || spnKeyI.(string) == "" {
+	spnKey, ok := credentials["serviceprincipalkey"]
+	if !ok || spnKey.(string) == "" {
 		return "null"
 	}
 
-	return spnKeyI.(string)
+	return spnKey.(string)
 }
 
 func flattenCredentials(serviceEndpoint *serviceendpoint.ServiceEndpoint, hashKey string, hashValue string) interface{} {
