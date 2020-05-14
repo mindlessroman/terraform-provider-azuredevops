@@ -76,7 +76,7 @@ First clone the repository to: `$GOPATH/src/github.com/terraform-providers/terra
 
 ```sh
 $ mkdir -p $GOPATH/src/github.com/terraform-providers && cd "$_"
-$ git clone git@github.com:terraform-providers/terraform-provider-azuredevops.git
+$ git clone git@github.com:microsoft/terraform-provider-azuredevops.git
 $ cd terraform-provider-azuredevops
 ```
 
