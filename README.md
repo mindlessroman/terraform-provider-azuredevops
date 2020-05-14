@@ -75,9 +75,9 @@ If you wish to work on the provider, you'll first need [Go](http://www.golang.or
 First clone the repository to: `$GOPATH/src/github.com/terraform-providers/terraform-provider-azuredevops`
 
 ```sh
-$ mkdir -p $GOPATH/src/github.com/terraform-providers/terraform-provider-azuredevops; cd $GOPATH/src/github.com/terraform-providers/terraform-provider-azuredevops
+$ mkdir -p $GOPATH/src/github.com/terraform-providers && cd "$_"
 $ git clone git@github.com:terraform-providers/terraform-provider-azuredevops.git
-$ cd $GOPATH/src/github.com/terraform-providers/terraform-provider-azuredevops.git
+$ cd terraform-provider-azuredevops
 ```
 
 ### Using a directory separate from GOPATH
