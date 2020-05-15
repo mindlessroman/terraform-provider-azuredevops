@@ -83,6 +83,9 @@ $ git clone git@github.com:microsoft/terraform-provider-azuredevops.git
 $ cd terraform-provider-azuredevops
 ```
 
+Once you've cloned, run the `./scripts/build.sh` and `./scripts/local-install.sh`, as recommended [here](https://github.com/microsoft/terraform-provider-azuredevops/blob/master/docs/contributing.md#3-build--install-provider).
+These commands will sideload the plugin for Terraform.
+
 ### Using a directory separate from GOPATH
 
 The infrastructure supports building and testing the provider outside `GOPATH` in an arbitrary directory.
